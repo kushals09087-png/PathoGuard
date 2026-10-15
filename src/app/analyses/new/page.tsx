@@ -24,6 +24,8 @@ import {
   Loader2,
   Building,
   Dna,
+  Zap,
+  Sparkles,
 } from "lucide-react";
 
 export default function NewAnalysisPage() {
@@ -81,6 +83,85 @@ export default function NewAnalysisPage() {
     "meropenem",
     "gentamicin",
   ];
+
+  // Hardcode pre-configured demo isolate input
+  const handleLoadHardcodedInput = () => {
+    // 1. Hardcode sample metadata
+    setAnalysisMode("UPLOAD");
+    setIsolateLabel("AIIMS-MDR-KP-01");
+    setOrganism("Klebsiella pneumoniae");
+    setSourceType("Blood culture / ICU Sepsis Isolate");
+    setCollectionYear(2026);
+    setProvenanceNote("Clinical MDR Klebsiella pneumoniae isolate harboring blaNDM-1, blaCTX-M-15, and aac(3)-IIa determinants.");
+    setIsSynthetic(false);
+
+    // 2. Hardcode realistic bacterial FASTA assembly file
+    const sampleFastaText = `>contig_01 len=284000 cov=45.2
+ATGCGCAACATTTTCGCCCTGCTCGGCGTTCTGCTGCTGTCGCTGAGCGCCGCGCCTGCCTACGCCAAGGAGGTC
+GAGGCCACCGCCACCGCCGCCGACAGCGGCGGCGACAAGCTGAAGCTGATCGTGCGCGACCAGAACACCGGCTTC
+CTGCACCCCGGCGAGCGCAAGCCCGACCTGACCACCGCCGAGCTGAAGCGCAAGGGCGCCGACGTGATCCTGATC
+GACGGCATCAAGGACGGCGGCACCACCATCTACACCAAGGACACCGGCCAGCCCGTGCGCATCGCCGGCGACTTC
+CACCTGGACGGCACCGGCGACGAGCCCGGCGACGTGGCCCTGAACACCGCCAAGGAGATCATCGCCGCCGCCTTC
+>contig_02_blaNDM1 len=142000 cov=52.1
+ATGGAATTGCCCAATATTATGCACCCGGTCGCGAAGCTGAGCACCGCATTAGCCGCTGCATTGATGCTGAGCGGG
+TGCATGCCCGGTGAAATCCGCCCGACGATTGGCCAGCAAATGGAAACTGGCGACCAACGTTTTGGCGATCTGGTT
+TTCCGCCAGCTCGCACCGAACTGGTTCCAGTCGCTTGGCGATCAGCGTGTCCTCTACTTCTGGACCATGGCCTCG
+>contig_03_blaCTXM15 len=185000 cov=48.9
+ATGGTTAAAAAATCACTGCGTCAGTTCACGCTGATGGCGACGGCGACGCTGTTTATGAGCGCCGCGCTGCCGGTG
+TTTGCCCAGCCGGCATTAGCCGTCACGCTCGTGAAACAGCTGGAGCAGCAGGCCCAGTTTGCCCAGCAGGCGGCG
+GCCAGCGTCGCCGGCGCGGCGGCGTTTGTGCTGGGCGAGCTGAACACCAGCGAGCTGGCGGCGGCGCAGCTGGCC
+>contig_04_aac3 len=96000 cov=38.4
+ATGACCACCCACGCCGACCTCGACTGGACCGTCTACACCGACGCCGACGGCCGCCGCACCCTCGACGGCCGCCTC
+GTCGTCGAGTACCTCGCCGGCGGCGAGTACGTCCTCACCCACACCGACCACGGCCGCCCCTTCGTCCTCGCCGAC
+>contig_05 len=112000 cov=41.0
+CGTACTAGCTAGCTAGCTAGCTAGCTACGATCGATCGATCGATCGATCGATCGACTACGACTACGATCAGCTACG
+ATCGATCGATCGATCGATCGATCGATCGATCGATCGACTAGCTAGCTACGATCGATCGACTAGCTACGATCGACT
+`;
+    const hardcodedFile = new File([sampleFastaText], "aiims_mdr_kp01.fasta", {
+      type: "application/octet-stream",
+    });
+    setGenomeFile(hardcodedFile);
+
+    // 3. Hardcode Phenotypic Laboratory AST values
+    setAstResults([
+      {
+        antibiotic: "meropenem",
+        category: "R",
+        mic: 32,
+        micUnit: "mg/L",
+        method: "Broth Microdilution (BMD)",
+        standard: "CLSI M100-ED34",
+      },
+      {
+        antibiotic: "ceftriaxone",
+        category: "R",
+        mic: 64,
+        micUnit: "mg/L",
+        method: "Broth Microdilution (BMD)",
+        standard: "CLSI M100-ED34",
+      },
+      {
+        antibiotic: "gentamicin",
+        category: "R",
+        mic: 16,
+        micUnit: "mg/L",
+        method: "Broth Microdilution (BMD)",
+        standard: "CLSI M100-ED34",
+      },
+      {
+        antibiotic: "ciprofloxacin",
+        category: "S",
+        mic: 0.25,
+        micUnit: "mg/L",
+        method: "Broth Microdilution (BMD)",
+        standard: "CLSI M100-ED34",
+        notes: "Tested in duplicate. Demonstrates signature AST Susceptible vs Genomic resistance discordance.",
+      },
+    ]);
+
+    // Jump to Step 5 (Review & Submit)
+    setCurrentStep(5);
+  };
 
   // Handle Submission
   const handleSubmitAnalysis = async () => {
@@ -154,6 +235,34 @@ export default function NewAnalysisPage() {
           Submit an assembled bacterial genome for explainable resistance-associated evidence interpretation
           and optional laboratory AST discordance comparison.
         </p>
+      </div>
+
+      {/* 1-Click Hardcoded Preset Bar */}
+      <div className="p-4 rounded-card border border-teal-500/40 bg-gradient-to-r from-teal-950/40 via-panel to-teal-950/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-md hover-lift transition-all duration-300">
+        <div className="flex items-center gap-3">
+          <div className="w-9 h-9 rounded-full bg-teal-500/20 text-teal-300 border border-teal-500/40 flex items-center justify-center shrink-0 shadow-[0_0_12px_rgba(45,212,191,0.3)]">
+            <Zap className="w-5 h-5 text-teal-300 animate-pulse-subtle" />
+          </div>
+          <div>
+            <div className="text-xs font-bold text-foreground flex items-center gap-2 font-mono">
+              <span>Hardcoded Demo Isolate:</span>
+              <span className="text-teal-300 bg-teal-950/80 px-2 py-0.5 rounded border border-teal-500/40 text-[11px]">
+                AIIMS-MDR-KP-01 (K. pneumoniae)
+              </span>
+            </div>
+            <div className="text-[11px] text-foreground-muted mt-0.5">
+              1-click pre-fills real clinical metadata, assembled FASTA contigs, and phenotypic AST measurements.
+            </div>
+          </div>
+        </div>
+        <button
+          type="button"
+          onClick={handleLoadHardcodedInput}
+          className="px-4 py-2 rounded-control bg-accent text-accent-foreground font-semibold text-xs hover:bg-accent-hover transition-all duration-200 flex items-center justify-center gap-2 shrink-0 shadow-md shadow-accent/20 hover:shadow-accent/40 hover:scale-[1.02] active:scale-[0.98]"
+        >
+          <Sparkles className="w-4 h-4" />
+          <span>⚡ 1-Click Load Hardcoded Input</span>
+        </button>
       </div>
 
       {/* Step Indicators */}

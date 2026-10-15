@@ -625,12 +625,12 @@
       "status": "FAILED",
       "stage": "FAILED",
       "lockedBy": null,
-      "heartbeatAt": "2026-10-15T11:37:48.075830+00:00",
+      "heartbeatAt": "2026-10-15T12:08:06.741327+00:00",
       "attemptCount": 2,
-      "lockedAt": "2026-10-15T11:37:48.075830+00:00",
+      "lockedAt": "2026-10-15T12:08:06.741327+00:00",
       "errorCode": "SAMPLE_NOT_FOUND",
       "errorMessage": "Sample smp_test not found in database.",
-      "completedAt": "2026-10-15T11:37:48.077549+00:00"
+      "completedAt": "2026-10-15T12:08:06.745184+00:00"
     },
     {
       "analysisId": "ana_max_attempts_job",
@@ -640,11 +640,11 @@
       "status": "FAILED",
       "stage": "FAILED",
       "lockedBy": "dead_worker",
-      "heartbeatAt": "2026-10-15T11:34:28.049033+00:00",
+      "heartbeatAt": "2026-10-15T12:04:45.843669+00:00",
       "attemptCount": 3,
       "errorCode": "LEASE_EXPIRED_MAX_RETRIES",
       "errorMessage": "Analysis timed out and exceeded 3 retry attempts.",
-      "completedAt": "2026-10-15T11:37:48.050095+00:00"
+      "completedAt": "2026-10-15T12:08:05.844607+00:00"
     },
     {
       "analysisId": "ana_tamper_test",
@@ -656,11 +656,11 @@
       "createdAt": "2024-10-15T00:00:00Z",
       "stage": "FAILED",
       "lockedBy": null,
-      "lockedAt": "2026-10-15T11:37:48.054199+00:00",
-      "heartbeatAt": "2026-10-15T11:37:48.054199+00:00",
+      "lockedAt": "2026-10-15T12:08:05.850147+00:00",
+      "heartbeatAt": "2026-10-15T12:08:05.850147+00:00",
       "errorCode": "FILE_TAMPERED",
       "errorMessage": "Stored genome file checksum does not match recorded upload SHA-256 hash. Halting analysis.",
-      "completedAt": "2026-10-15T11:37:48.054992+00:00"
+      "completedAt": "2026-10-15T12:08:05.851782+00:00"
     },
     {
       "analysisId": "ana_c230d20f3a5e",
@@ -1000,6 +1000,44 @@
       },
       "rawOutputAvailable": true,
       "mlStatus": "AVAILABLE"
+    },
+    {
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "sampleId": "smp_05a8a2a0991f",
+      "fileId": "fil_5419d3490cbc",
+      "status": "COMPLETED_WITH_WARNINGS",
+      "stage": "COMPLETED",
+      "origin": "REAL_ANALYSIS",
+      "idempotencyKey": null,
+      "attemptCount": 1,
+      "createdAt": "2026-10-15T12:08:05.744451+00:00",
+      "completedAt": "2026-10-15T12:08:05.783084+00:00",
+      "_id": "19",
+      "lockedBy": null,
+      "lockedAt": "2026-10-15T12:08:05.754022+00:00",
+      "heartbeatAt": "2026-10-15T12:08:05.769454+00:00",
+      "qcSummary": {
+        "status": "WARN",
+        "contigs": 2,
+        "totalLength": 4000,
+        "n50": 2000,
+        "nFraction": 0.0,
+        "warnings": [
+          "Assembly size (4,000 bp) is smaller than expected for Escherichia coli (minimum 4,000,000 bp)"
+        ],
+        "errors": []
+      },
+      "findingsCount": 4,
+      "versions": {
+        "amrfinder": "NCBI AMRFinderPlus v3.12.8 (Golden Reference)",
+        "database": "2024-05-02.1",
+        "rules": "1.0.0",
+        "ml": "1.0.0",
+        "qc": "1.0.0"
+      },
+      "rawOutputAvailable": true,
+      "mlStatus": "AVAILABLE"
     }
   ],
   "samples": [
@@ -1276,6 +1314,26 @@
       "source": "Blood culture",
       "createdAt": "2026-10-15T11:37:47.968616+00:00",
       "_id": "28"
+    },
+    {
+      "sampleId": "smp_6c0c11ceeb4f",
+      "labId": "LAB-REF-AIIMS",
+      "sampleLabel": "LAB-A-PRIVATE",
+      "organism": "Escherichia coli",
+      "collectionDate": null,
+      "source": null,
+      "createdAt": "2026-10-15T12:08:05.664898+00:00",
+      "_id": "29"
+    },
+    {
+      "sampleId": "smp_05a8a2a0991f",
+      "labId": "LAB-REF-AIIMS",
+      "sampleLabel": "ECOLI-E2E-TEST",
+      "organism": "Escherichia coli",
+      "collectionDate": "2024-10-15",
+      "source": "Blood culture",
+      "createdAt": "2026-10-15T12:08:05.739054+00:00",
+      "_id": "30"
     }
   ],
   "analysis_findings": [
@@ -3340,6 +3398,206 @@
       "analysisId": "ana_08e2b0f60271",
       "labId": "LAB-REF-AIIMS",
       "_id": "47"
+    },
+    {
+      "findingId": "fnd_ana_beb1ebec53ff_001",
+      "geneSymbol": "gyrA_S83L",
+      "sequenceName": "gyrA S83L fluoroquinolone resistance mutation",
+      "drugClass": "QUINOLONE",
+      "subclass": "FLUOROQUINOLONE",
+      "percentIdentity": 100.0,
+      "percentCoverage": 100.0,
+      "detectionMethod": "POINT",
+      "detectionQuality": "EXACT",
+      "elementSubtype": "POINT",
+      "coreHit": true,
+      "evidenceTier": "A_CURATED_STRONG",
+      "sourceTool": "NCBI AMRFinderPlus v3.12.8 (Golden Reference)",
+      "rawHit": {
+        "Protein id": "NA",
+        "Contig id": "contig_01",
+        "Start": "1205",
+        "Stop": "3815",
+        "Strand": "+",
+        "Element symbol": "gyrA_S83L",
+        "Element name": "gyrA S83L fluoroquinolone resistance mutation",
+        "Scope": "core",
+        "Type": "POINT",
+        "Subtype": "POINT",
+        "Class": "QUINOLONE",
+        "Subclass": "FLUOROQUINOLONE",
+        "Method": "POINT",
+        "Target length": "2610",
+        "Reference sequence length": "2610",
+        "% Coverage of reference": "100.00",
+        "% Identity to reference": "100.00",
+        "Alignment length": "2610",
+        "Closest reference accession": "WP_000025178.1",
+        "Closest reference name": "gyrA",
+        "HMM accession": "NA",
+        "HMM description": "NA"
+      },
+      "contigId": "contig_01",
+      "start": 1205,
+      "stop": 3815,
+      "strand": "+",
+      "closestReferenceAccession": "WP_000025178.1",
+      "closestReferenceName": "gyrA",
+      "hmmAccession": "NA",
+      "hmmDescription": "NA",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "_id": "48"
+    },
+    {
+      "findingId": "fnd_ana_beb1ebec53ff_002",
+      "geneSymbol": "parC_S80I",
+      "sequenceName": "parC S80I fluoroquinolone resistance mutation",
+      "drugClass": "QUINOLONE",
+      "subclass": "FLUOROQUINOLONE",
+      "percentIdentity": 100.0,
+      "percentCoverage": 100.0,
+      "detectionMethod": "POINT",
+      "detectionQuality": "EXACT",
+      "elementSubtype": "POINT",
+      "coreHit": true,
+      "evidenceTier": "A_CURATED_STRONG",
+      "sourceTool": "NCBI AMRFinderPlus v3.12.8 (Golden Reference)",
+      "rawHit": {
+        "Protein id": "NA",
+        "Contig id": "contig_01",
+        "Start": "5420",
+        "Stop": "7675",
+        "Strand": "-",
+        "Element symbol": "parC_S80I",
+        "Element name": "parC S80I fluoroquinolone resistance mutation",
+        "Scope": "core",
+        "Type": "POINT",
+        "Subtype": "POINT",
+        "Class": "QUINOLONE",
+        "Subclass": "FLUOROQUINOLONE",
+        "Method": "POINT",
+        "Target length": "2256",
+        "Reference sequence length": "2256",
+        "% Coverage of reference": "100.00",
+        "% Identity to reference": "100.00",
+        "Alignment length": "2256",
+        "Closest reference accession": "WP_000727092.1",
+        "Closest reference name": "parC",
+        "HMM accession": "NA",
+        "HMM description": "NA"
+      },
+      "contigId": "contig_01",
+      "start": 5420,
+      "stop": 7675,
+      "strand": "-",
+      "closestReferenceAccession": "WP_000727092.1",
+      "closestReferenceName": "parC",
+      "hmmAccession": "NA",
+      "hmmDescription": "NA",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "_id": "49"
+    },
+    {
+      "findingId": "fnd_ana_beb1ebec53ff_003",
+      "geneSymbol": "tet(A)",
+      "sequenceName": "tet(A) tetracycline efflux MFS transporter",
+      "drugClass": "TETRACYCLINE",
+      "subclass": "TETRACYCLINE",
+      "percentIdentity": 100.0,
+      "percentCoverage": 100.0,
+      "detectionMethod": "BLASTN",
+      "detectionQuality": "EXACT",
+      "elementSubtype": "AMR",
+      "coreHit": false,
+      "evidenceTier": "A_CURATED_STRONG",
+      "sourceTool": "NCBI AMRFinderPlus v3.12.8 (Golden Reference)",
+      "rawHit": {
+        "Protein id": "NA",
+        "Contig id": "contig_03",
+        "Start": "890",
+        "Stop": "2090",
+        "Strand": "+",
+        "Element symbol": "tet(A)",
+        "Element name": "tet(A) tetracycline efflux MFS transporter",
+        "Scope": "plus",
+        "Type": "AMR",
+        "Subtype": "AMR",
+        "Class": "TETRACYCLINE",
+        "Subclass": "TETRACYCLINE",
+        "Method": "BLASTN",
+        "Target length": "1197",
+        "Reference sequence length": "1197",
+        "% Coverage of reference": "100.00",
+        "% Identity to reference": "100.00",
+        "Alignment length": "1197",
+        "Closest reference accession": "WP_000570659.1",
+        "Closest reference name": "tet(A)",
+        "HMM accession": "NA",
+        "HMM description": "NA"
+      },
+      "contigId": "contig_03",
+      "start": 890,
+      "stop": 2090,
+      "strand": "+",
+      "closestReferenceAccession": "WP_000570659.1",
+      "closestReferenceName": "tet(A)",
+      "hmmAccession": "NA",
+      "hmmDescription": "NA",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "_id": "50"
+    },
+    {
+      "findingId": "fnd_ana_beb1ebec53ff_004",
+      "geneSymbol": "blaTEM-1",
+      "sequenceName": "blaTEM-1 class A beta-lactamase",
+      "drugClass": "BETA-LACTAM",
+      "subclass": "PENICILLIN",
+      "percentIdentity": 100.0,
+      "percentCoverage": 100.0,
+      "detectionMethod": "BLASTN",
+      "detectionQuality": "EXACT",
+      "elementSubtype": "AMR",
+      "coreHit": true,
+      "evidenceTier": "A_CURATED_STRONG",
+      "sourceTool": "NCBI AMRFinderPlus v3.12.8 (Golden Reference)",
+      "rawHit": {
+        "Protein id": "NA",
+        "Contig id": "contig_04",
+        "Start": "450",
+        "Stop": "1310",
+        "Strand": "+",
+        "Element symbol": "blaTEM-1",
+        "Element name": "blaTEM-1 class A beta-lactamase",
+        "Scope": "core",
+        "Type": "AMR",
+        "Subtype": "AMR",
+        "Class": "BETA-LACTAM",
+        "Subclass": "PENICILLIN",
+        "Method": "BLASTN",
+        "Target length": "861",
+        "Reference sequence length": "861",
+        "% Coverage of reference": "100.00",
+        "% Identity to reference": "100.00",
+        "Alignment length": "861",
+        "Closest reference accession": "WP_000027057.1",
+        "Closest reference name": "blaTEM-1",
+        "HMM accession": "NA",
+        "HMM description": "NA"
+      },
+      "contigId": "contig_04",
+      "start": 450,
+      "stop": 1310,
+      "strand": "+",
+      "closestReferenceAccession": "WP_000027057.1",
+      "closestReferenceName": "blaTEM-1",
+      "hmmAccession": "NA",
+      "hmmDescription": "NA",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "_id": "51"
     }
   ],
   "antibiotic_assessments": [
@@ -4619,6 +4877,100 @@
       "mlPredictionRef": "mlp_ana_08e2b0f60271_tetracycline",
       "createdAt": "2026-10-15T11:37:47.995066+00:00",
       "_id": "73"
+    },
+    {
+      "assessmentId": "ass_ana_beb1ebec53ff_ciprofloxacin",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "antibiotic": "Ciprofloxacin",
+      "resultCategory": "RESISTANCE_EVIDENCE_STRONG",
+      "confidence": 0.95,
+      "supportingFindingIds": [
+        "fnd_ana_beb1ebec53ff_001",
+        "fnd_ana_beb1ebec53ff_002"
+      ],
+      "appliedRuleIds": [
+        "EC-CIP-001"
+      ],
+      "mechanisms": [
+        "Combined QRDR missense mutations in DNA gyrase subunit A and topoisomerase IV subunit A. (gyrA_S83L)",
+        "Combined QRDR missense mutations in DNA gyrase subunit A and topoisomerase IV subunit A. (parC_S80I)"
+      ],
+      "limitations": "Single gyrA mutation confers intermediate or low-level resistance; dual mutations required for robust high-level resistance.",
+      "hybridLabel": "CONCORDANT_RESISTANT",
+      "mlPredictionRef": "mlp_ana_beb1ebec53ff_ciprofloxacin",
+      "createdAt": "2026-10-15T12:08:05.770293+00:00",
+      "_id": "74"
+    },
+    {
+      "assessmentId": "ass_ana_beb1ebec53ff_ceftriaxone",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "antibiotic": "Ceftriaxone",
+      "resultCategory": "INSUFFICIENT_EVIDENCE",
+      "confidence": 0.2,
+      "supportingFindingIds": [],
+      "appliedRuleIds": [],
+      "mechanisms": [],
+      "limitations": "No curated resistance markers detected for Ceftriaxone in assembly. Absence of evidence is not proof of susceptibility. Uncharacterized or expression-based resistance mechanisms may exist.",
+      "hybridLabel": "CONCORDANT_NO_EVIDENCE",
+      "mlPredictionRef": "mlp_ana_beb1ebec53ff_ceftriaxone",
+      "createdAt": "2026-10-15T12:08:05.770323+00:00",
+      "_id": "75"
+    },
+    {
+      "assessmentId": "ass_ana_beb1ebec53ff_meropenem",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "antibiotic": "Meropenem",
+      "resultCategory": "INSUFFICIENT_EVIDENCE",
+      "confidence": 0.2,
+      "supportingFindingIds": [],
+      "appliedRuleIds": [],
+      "mechanisms": [],
+      "limitations": "No curated resistance markers detected for Meropenem in assembly. Absence of evidence is not proof of susceptibility. Uncharacterized or expression-based resistance mechanisms may exist.",
+      "hybridLabel": "CONCORDANT_NO_EVIDENCE",
+      "mlPredictionRef": "mlp_ana_beb1ebec53ff_meropenem",
+      "createdAt": "2026-10-15T12:08:05.770348+00:00",
+      "_id": "76"
+    },
+    {
+      "assessmentId": "ass_ana_beb1ebec53ff_gentamicin",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "antibiotic": "Gentamicin",
+      "resultCategory": "INSUFFICIENT_EVIDENCE",
+      "confidence": 0.2,
+      "supportingFindingIds": [],
+      "appliedRuleIds": [],
+      "mechanisms": [],
+      "limitations": "No curated resistance markers detected for Gentamicin in assembly. Absence of evidence is not proof of susceptibility. Uncharacterized or expression-based resistance mechanisms may exist.",
+      "hybridLabel": "CONCORDANT_NO_EVIDENCE",
+      "mlPredictionRef": "mlp_ana_beb1ebec53ff_gentamicin",
+      "createdAt": "2026-10-15T12:08:05.770368+00:00",
+      "_id": "77"
+    },
+    {
+      "assessmentId": "ass_ana_beb1ebec53ff_tetracycline",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "antibiotic": "Tetracycline",
+      "resultCategory": "RESISTANCE_EVIDENCE_STRONG",
+      "confidence": 0.95,
+      "supportingFindingIds": [
+        "fnd_ana_beb1ebec53ff_003"
+      ],
+      "appliedRuleIds": [
+        "EC-TET-001"
+      ],
+      "mechanisms": [
+        "Major facilitator superfamily (MFS) tetracycline efflux pump or ribosomal protection protein. (tet(A))"
+      ],
+      "limitations": "Does not automatically confer resistance to glycylcyclines (tigecycline).",
+      "hybridLabel": "CONCORDANT_RESISTANT",
+      "mlPredictionRef": "mlp_ana_beb1ebec53ff_tetracycline",
+      "createdAt": "2026-10-15T12:08:05.770387+00:00",
+      "_id": "78"
     }
   ],
   "ast_results": [
@@ -4750,6 +5102,22 @@
       "testDate": null,
       "notes": "Phenotypic AST tested in duplicate; clear zone / low MIC.",
       "createdAt": "2026-10-15T11:37:48.010534+00:00"
+    },
+    {
+      "analysisId": "ana_beb1ebec53ff",
+      "antibiotic": "Ciprofloxacin",
+      "astId": "ast_e0f59feaceaa",
+      "sampleId": "smp_05a8a2a0991f",
+      "labId": "LAB-REF-AIIMS",
+      "category": "S",
+      "mic": 0.25,
+      "micUnit": "mg/L",
+      "method": "Broth Microdilution (BMD)",
+      "standard": "CLSI M100-ED34",
+      "standardVersion": "2024",
+      "testDate": null,
+      "notes": "Phenotypic AST tested in duplicate; clear zone / low MIC.",
+      "createdAt": "2026-10-15T12:08:05.787203+00:00"
     }
   ],
   "discordance_events": [
@@ -5073,6 +5441,49 @@
         "_id": "1"
       },
       "updatedAt": "2026-10-15T11:37:48.013646+00:00"
+    },
+    {
+      "discordanceId": "dis_ana_beb1ebec53ff_ciprofloxacin",
+      "createdAt": "2026-10-15T12:08:05.788359+00:00",
+      "reviewNotes": "Confirmed discordance. Repeat BMD scheduled; subpopulation heteroresistance suspected.",
+      "reviewedBy": "LAB-REF-AIIMS",
+      "reviewedAt": "2026-10-15T12:08:05.791272+00:00",
+      "analysisId": "ana_beb1ebec53ff",
+      "sampleId": "smp_05a8a2a0991f",
+      "labId": "LAB-REF-AIIMS",
+      "antibiotic": "Ciprofloxacin",
+      "discordanceType": "GENOMIC_RESISTANT_AST_SUSCEPTIBLE",
+      "genomicCategory": "RESISTANCE_EVIDENCE_STRONG",
+      "astCategory": "S",
+      "reviewStatus": "REVIEWED_CONFIRMED",
+      "priorityScore": 90,
+      "explanation": "High-priority discordance: Curated genomic resistance markers were detected (RESISTANCE_EVIDENCE_STRONG), yet phenotypic AST indicates Susceptible. Potential causes include subpopulation heteroresistance, unexpressed or silenced genes, incorrect isolate identification, or AST inoculum artifacts. Laboratory review recommended.",
+      "pairReliabilitySnapshot": {
+        "benchmarkId": "bm_ec_cip",
+        "organism": "Escherichia coli",
+        "antibiotic": "Ciprofloxacin",
+        "sampleCount": 420,
+        "agreementRate": 0.893,
+        "ciLower": 0.86,
+        "ciUpper": 0.92,
+        "abstentionRate": 0.021,
+        "backgroundDiscordanceRate": 0.086,
+        "splitMethod": "Lineage-aware 80/20 held-out split (NCBI Pathogen Detection isolates)",
+        "evaluationDataset": "NCBI Pathogen Detection BioProject PRJNA292661",
+        "astStandard": "CLSI M100-ED34",
+        "toolVersions": {
+          "amrfinder": "3.12.8",
+          "database": "2024-05-02.1"
+        },
+        "ruleVersions": {
+          "provider": "SeedYamlProvider",
+          "version": "1.0.0"
+        },
+        "limitations": "Plasmid-mediated qnr genes confer low-level resistance that may test AST-intermediate without chromosomal gyrA/parC mutations.",
+        "createdAt": "2024-10-01T00:00:00Z",
+        "_id": "1"
+      },
+      "updatedAt": "2026-10-15T12:08:05.791272+00:00"
     }
   ],
   "genome_files": [
@@ -5195,7 +5606,7 @@
       "fileId": "fil_tamper_test",
       "sampleId": "smp_tamper_test",
       "labId": "LAB-REF-AIIMS",
-      "storageKey": "LAB-REF-AIIMS/smp_tamper_test_00345cb50972.fasta",
+      "storageKey": "LAB-REF-AIIMS/smp_tamper_test_2223177b70db.fasta",
       "sha256": "29bf886639fe769319733bf5e3a2d4f33aa09f64293f92d94066c5b822da61b5",
       "fileSize": 17
     },
@@ -5394,6 +5805,29 @@
       "validationStatus": "VALID",
       "createdAt": "2026-10-15T11:37:47.971035+00:00",
       "_id": "15",
+      "qcSummary": {
+        "status": "WARN",
+        "contigs": 2,
+        "totalLength": 4000,
+        "n50": 2000,
+        "nFraction": 0.0,
+        "warnings": [
+          "Assembly size (4,000 bp) is smaller than expected for Escherichia coli (minimum 4,000,000 bp)"
+        ],
+        "errors": []
+      }
+    },
+    {
+      "fileId": "fil_5419d3490cbc",
+      "sampleId": "smp_05a8a2a0991f",
+      "labId": "LAB-REF-AIIMS",
+      "filename": "isolate.fasta",
+      "fileSize": 4023,
+      "sha256": "7448e6effda0ce7bd6e4e128a748255d0eeba9f61f9e71fc2b8a045183be3c82",
+      "storageKey": "LAB-REF-AIIMS/smp_05a8a2a0991f_de5368679ddd.fasta",
+      "validationStatus": "VALID",
+      "createdAt": "2026-10-15T12:08:05.741644+00:00",
+      "_id": "16",
       "qcSummary": {
         "status": "WARN",
         "contigs": 2,
@@ -5687,6 +6121,30 @@
       "assessmentId": "ass_ana_08e2b0f60271_tetracycline",
       "contributionType": "CAUSAL_DETERMINANT",
       "_id": "35"
+    },
+    {
+      "linkId": "lnk_ass_ana_beb1ebec53ff_ciprofloxacin_fnd_ana_beb1ebec53ff_001",
+      "analysisId": "ana_beb1ebec53ff",
+      "findingId": "fnd_ana_beb1ebec53ff_001",
+      "assessmentId": "ass_ana_beb1ebec53ff_ciprofloxacin",
+      "contributionType": "CAUSAL_DETERMINANT",
+      "_id": "36"
+    },
+    {
+      "linkId": "lnk_ass_ana_beb1ebec53ff_ciprofloxacin_fnd_ana_beb1ebec53ff_002",
+      "analysisId": "ana_beb1ebec53ff",
+      "findingId": "fnd_ana_beb1ebec53ff_002",
+      "assessmentId": "ass_ana_beb1ebec53ff_ciprofloxacin",
+      "contributionType": "CAUSAL_DETERMINANT",
+      "_id": "37"
+    },
+    {
+      "linkId": "lnk_ass_ana_beb1ebec53ff_tetracycline_fnd_ana_beb1ebec53ff_003",
+      "analysisId": "ana_beb1ebec53ff",
+      "findingId": "fnd_ana_beb1ebec53ff_003",
+      "assessmentId": "ass_ana_beb1ebec53ff_tetracycline",
+      "contributionType": "CAUSAL_DETERMINANT",
+      "_id": "38"
     }
   ],
   "audit_events": [
@@ -5773,6 +6231,20 @@
       },
       "timestamp": "2026-10-15T11:37:48.013646+00:00",
       "_id": "6"
+    },
+    {
+      "eventId": "aud_dis_ana_beb1ebec53ff_ciprofloxacin_1792066085",
+      "labId": "LAB-REF-AIIMS",
+      "action": "DISCORDANCE_REVIEW_UPDATED",
+      "resourceType": "discordance_event",
+      "resourceId": "dis_ana_beb1ebec53ff_ciprofloxacin",
+      "details": {
+        "previousStatus": "OPEN",
+        "newStatus": "REVIEWED_CONFIRMED",
+        "notes": "Confirmed discordance. Repeat BMD scheduled; subpopulation heteroresistance suspected."
+      },
+      "timestamp": "2026-10-15T12:08:05.791272+00:00",
+      "_id": "7"
     }
   ],
   "analysis_raw_outputs": [
@@ -5895,6 +6367,21 @@
       },
       "createdAt": "2026-10-15T11:37:47.992934+00:00",
       "_id": "8"
+    },
+    {
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "rawTsv": "Protein id\tContig id\tStart\tStop\tStrand\tElement symbol\tElement name\tScope\tType\tSubtype\tClass\tSubclass\tMethod\tTarget length\tReference sequence length\t% Coverage of reference\t% Identity to reference\tAlignment length\tClosest reference accession\tClosest reference name\tHMM accession\tHMM description\nNA\tcontig_01\t1205\t3815\t+\tgyrA_S83L\tgyrA S83L fluoroquinolone resistance mutation\tcore\tPOINT\tPOINT\tQUINOLONE\tFLUOROQUINOLONE\tPOINT\t2610\t2610\t100.00\t100.00\t2610\tWP_000025178.1\tgyrA\tNA\tNA\nNA\tcontig_01\t5420\t7675\t-\tparC_S80I\tparC S80I fluoroquinolone resistance mutation\tcore\tPOINT\tPOINT\tQUINOLONE\tFLUOROQUINOLONE\tPOINT\t2256\t2256\t100.00\t100.00\t2256\tWP_000727092.1\tparC\tNA\tNA\nNA\tcontig_03\t890\t2090\t+\ttet(A)\ttet(A) tetracycline efflux MFS transporter\tplus\tAMR\tAMR\tTETRACYCLINE\tTETRACYCLINE\tBLASTN\t1197\t1197\t100.00\t100.00\t1197\tWP_000570659.1\ttet(A)\tNA\tNA\nNA\tcontig_04\t450\t1310\t+\tblaTEM-1\tblaTEM-1 class A beta-lactamase\tcore\tAMR\tAMR\tBETA-LACTAM\tPENICILLIN\tBLASTN\t861\t861\t100.00\t100.00\t861\tWP_000027057.1\tblaTEM-1\tNA\tNA",
+      "toolVersion": "NCBI AMRFinderPlus v3.12.8 (Golden Reference)",
+      "databaseVersion": "2024-05-02.1",
+      "diagnostics": {
+        "executionTimeSeconds": 0.05,
+        "command": "amrfinder [GOLDEN_FIXTURE]",
+        "returncode": 0,
+        "isFallback": true
+      },
+      "createdAt": "2026-10-15T12:08:05.768507+00:00",
+      "_id": "9"
     }
   ],
   "ml_predictions": [
@@ -6967,6 +7454,163 @@
       "hybridExplanation": "Independent concordance: Both the curated rule engine and the trained statistical model indicate resistance.",
       "createdAt": "2026-10-15T11:37:47.995065+00:00",
       "_id": "38"
+    },
+    {
+      "predictionId": "mlp_ana_beb1ebec53ff_ciprofloxacin",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "organism": "Escherichia coli",
+      "antibiotic": "Ciprofloxacin",
+      "available": true,
+      "status": "AVAILABLE",
+      "abstained": false,
+      "prediction": "RESISTANT",
+      "score": 0.999,
+      "band": "HIGH_CONFIDENCE_RESISTANT",
+      "modelId": "ml_ec_cip_rf_v1",
+      "modelVersion": "1.0.0",
+      "topFeatures": [
+        {
+          "feature": "mut_gyrA_S83L",
+          "value": 1.0,
+          "weight": 3.8,
+          "contribution": 3.8
+        },
+        {
+          "feature": "mut_parC_S80I",
+          "value": 1.0,
+          "weight": 3.2,
+          "contribution": 3.2
+        },
+        {
+          "feature": "max_identity_class",
+          "value": 100.0,
+          "weight": 0.02,
+          "contribution": 2.0
+        },
+        {
+          "feature": "quinolone_count",
+          "value": 2.0,
+          "weight": 0.6,
+          "contribution": 1.2
+        }
+      ],
+      "explanation": "Model predicts Resistance (score: 1.00), driven primarily by mut_gyrA_S83L.",
+      "hybridLabel": "CONCORDANT_RESISTANT",
+      "hybridExplanation": "Independent concordance: Both the curated rule engine and the trained statistical model indicate resistance.",
+      "createdAt": "2026-10-15T12:08:05.770290+00:00",
+      "_id": "39"
+    },
+    {
+      "predictionId": "mlp_ana_beb1ebec53ff_ceftriaxone",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "organism": "Escherichia coli",
+      "antibiotic": "Ceftriaxone",
+      "available": true,
+      "status": "AVAILABLE",
+      "abstained": false,
+      "prediction": "NOT_RESISTANT",
+      "score": 0.091,
+      "band": "HIGH_CONFIDENCE_NOT_RESISTANT",
+      "modelId": "ml_ec_cro_rf_v1",
+      "modelVersion": "1.0.0",
+      "topFeatures": [
+        {
+          "feature": "beta_lactam_count",
+          "value": 1.0,
+          "weight": 0.7,
+          "contribution": 0.7
+        }
+      ],
+      "explanation": "Model predicts Not Resistant (score: 0.09); absence of dominant resistance determinants.",
+      "hybridLabel": "CONCORDANT_NO_EVIDENCE",
+      "hybridExplanation": "Consistent absence of evidence. Note: Lack of detected determinants is not clinical proof of susceptibility.",
+      "createdAt": "2026-10-15T12:08:05.770321+00:00",
+      "_id": "40"
+    },
+    {
+      "predictionId": "mlp_ana_beb1ebec53ff_meropenem",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "organism": "Escherichia coli",
+      "antibiotic": "Meropenem",
+      "available": true,
+      "status": "AVAILABLE",
+      "abstained": false,
+      "prediction": "NOT_RESISTANT",
+      "score": 0.047,
+      "band": "HIGH_CONFIDENCE_NOT_RESISTANT",
+      "modelId": "ml_ec_mem_rf_v1",
+      "modelVersion": "1.0.0",
+      "topFeatures": [
+        {
+          "feature": "beta_lactam_count",
+          "value": 1.0,
+          "weight": 0.5,
+          "contribution": 0.5
+        }
+      ],
+      "explanation": "Model predicts Not Resistant (score: 0.05); absence of dominant resistance determinants.",
+      "hybridLabel": "CONCORDANT_NO_EVIDENCE",
+      "hybridExplanation": "Consistent absence of evidence. Note: Lack of detected determinants is not clinical proof of susceptibility.",
+      "createdAt": "2026-10-15T12:08:05.770347+00:00",
+      "_id": "41"
+    },
+    {
+      "predictionId": "mlp_ana_beb1ebec53ff_gentamicin",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "organism": "Escherichia coli",
+      "antibiotic": "Gentamicin",
+      "available": true,
+      "status": "AVAILABLE",
+      "abstained": false,
+      "prediction": "NOT_RESISTANT",
+      "score": 0.076,
+      "band": "HIGH_CONFIDENCE_NOT_RESISTANT",
+      "modelId": "ml_ec_gen_rf_v1",
+      "modelVersion": "1.0.0",
+      "topFeatures": [],
+      "explanation": "Model predicts Not Resistant (score: 0.08); absence of dominant resistance determinants.",
+      "hybridLabel": "CONCORDANT_NO_EVIDENCE",
+      "hybridExplanation": "Consistent absence of evidence. Note: Lack of detected determinants is not clinical proof of susceptibility.",
+      "createdAt": "2026-10-15T12:08:05.770366+00:00",
+      "_id": "42"
+    },
+    {
+      "predictionId": "mlp_ana_beb1ebec53ff_tetracycline",
+      "analysisId": "ana_beb1ebec53ff",
+      "labId": "LAB-REF-AIIMS",
+      "organism": "Escherichia coli",
+      "antibiotic": "Tetracycline",
+      "available": true,
+      "status": "AVAILABLE",
+      "abstained": false,
+      "prediction": "RESISTANT",
+      "score": 0.909,
+      "band": "HIGH_CONFIDENCE_RESISTANT",
+      "modelId": "ml_ec_tet_rf_v1",
+      "modelVersion": "1.0.0",
+      "topFeatures": [
+        {
+          "feature": "has_tetA",
+          "value": 1.0,
+          "weight": 3.6,
+          "contribution": 3.6
+        },
+        {
+          "feature": "tetracycline_count",
+          "value": 1.0,
+          "weight": 0.9,
+          "contribution": 0.9
+        }
+      ],
+      "explanation": "Model predicts Resistance (score: 0.91), driven primarily by has_tetA.",
+      "hybridLabel": "CONCORDANT_RESISTANT",
+      "hybridExplanation": "Independent concordance: Both the curated rule engine and the trained statistical model indicate resistance.",
+      "createdAt": "2026-10-15T12:08:05.770385+00:00",
+      "_id": "43"
     }
   ]
 }

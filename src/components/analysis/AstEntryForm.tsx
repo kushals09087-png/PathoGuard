@@ -121,7 +121,7 @@ export const AstEntryForm: React.FC<AstEntryFormProps> = ({
           <p className="text-[11px] leading-relaxed">
             Laboratory AST results are optional for genomic evidence interpretation, but necessary for the intended
             laboratory-versus-genome discordance review. Enter phenotypic results as reported by your laboratory;
-            Genome Firewall will compare them against genomic resistance calls without altering the genomic assessment.
+            PathoGuard will compare them against genomic resistance calls without altering the genomic assessment.
           </p>
         </div>
       </div>
