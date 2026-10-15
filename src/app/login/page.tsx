@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth, PRECONFIGURED_LABS } from "@/context/AuthContext";
 import { UseStatement } from "@/components/common/UseStatement";
+import { ThemeToggle } from "@/components/common/ThemeToggle";
 import {
   ShieldAlert,
   Building2,
@@ -13,6 +14,7 @@ import {
   AlertCircle,
   FlaskConical,
   CheckCircle2,
+  Sparkles,
 } from "lucide-react";
 
 export default function LoginPage() {
@@ -55,22 +57,35 @@ export default function LoginPage() {
   };
 
   const handleSelectPreconfiguredLab = (pLabId: string) => {
-    const defaultKey = process.env.NEXT_PUBLIC_DEMO_ACCESS_KEY || "gf_demo_key_2026";
+    const defaultKey = process.env.NEXT_PUBLIC_DEMO_ACCESS_KEY || "DemoPassword123!";
     setLabId(pLabId);
     setAccessKey(defaultKey);
     setErrorMessage(null);
   };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col justify-between p-4 sm:p-6 lg:p-8">
-      <div className="flex-1 flex items-center justify-center">
-        <div className="w-full max-w-md space-y-6">
+    <div className="relative min-h-screen bg-background flex flex-col justify-between p-4 sm:p-6 lg:p-8 overflow-hidden transition-colors duration-300">
+      {/* Dynamic Ambient Background Glows */}
+      <div className="absolute top-10 left-1/4 w-96 h-96 rounded-full bg-accent/10 blur-3xl pointer-events-none animate-pulse-subtle" />
+      <div className="absolute bottom-10 right-1/4 w-80 h-80 rounded-full bg-blue-500/10 blur-3xl pointer-events-none" />
+
+      {/* Top Navigation Bar with Theme Switcher */}
+      <div className="max-w-md mx-auto w-full flex items-center justify-end z-10">
+        <ThemeToggle showLabel />
+      </div>
+
+      <div className="flex-1 flex items-center justify-center relative z-10 py-6">
+        <div className="w-full max-w-md space-y-6 animate-fade-in-up">
           {/* Logo & Headline */}
           <div className="text-center space-y-2">
-            <div className="w-12 h-12 rounded-control bg-accent-subtle border border-accent/40 flex items-center justify-center text-accent mx-auto">
-              <ShieldAlert className="w-7 h-7" />
+            <div className="relative w-14 h-14 rounded-2xl bg-accent-subtle border border-accent/40 flex items-center justify-center text-accent mx-auto shadow-lg shadow-accent/10 group">
+              <ShieldAlert className="w-8 h-8 transition-transform duration-300 group-hover:scale-110" />
+              <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-3 w-3 bg-accent"></span>
+              </span>
             </div>
-            <h1 className="text-2xl font-bold text-foreground tracking-tight">
+            <h1 className="text-3xl font-extrabold text-foreground tracking-tight">
               Genome Firewall
             </h1>
             <p className="text-xs text-foreground-muted font-mono max-w-xs mx-auto">
@@ -82,19 +97,24 @@ export default function LoginPage() {
           <UseStatement variant="banner" />
 
           {/* Login Card */}
-          <div className="rounded-card border border-panel-border bg-panel p-6 shadow-xl space-y-5">
+          <div className="rounded-card border border-panel-border bg-panel/90 backdrop-blur-md p-6 shadow-2xl space-y-5 transition-all duration-300 hover:border-accent/30">
             <div className="border-b border-panel-border/60 pb-3">
-              <h2 className="text-sm font-semibold text-foreground">
-                Laboratory Session Authorization
-              </h2>
-              <p className="text-xs text-foreground-muted">
+              <div className="flex items-center justify-between">
+                <h2 className="text-sm font-semibold text-foreground">
+                  Laboratory Session Authorization
+                </h2>
+                <span className="text-[10px] font-mono text-accent bg-accent-subtle px-2 py-0.5 rounded border border-accent/20">
+                  SECURE ACCESS
+                </span>
+              </div>
+              <p className="text-xs text-foreground-muted mt-1">
                 Enter your designated Lab ID and credential to access your laboratory's isolated analysis workspace.
               </p>
             </div>
 
             {errorMessage && (
               <div
-                className="p-3 rounded-control border border-red-500/40 bg-red-950/30 text-xs text-red-300 flex items-start gap-2"
+                className="p-3 rounded-control border border-red-500/40 bg-red-950/30 text-xs text-red-300 flex items-start gap-2 animate-fade-in"
                 role="alert"
               >
                 <AlertCircle className="w-4 h-4 text-red-400 shrink-0 mt-0.5" />
@@ -118,7 +138,7 @@ export default function LoginPage() {
                     value={labId}
                     onChange={(e) => setLabId(e.target.value)}
                     placeholder="e.g. LAB-REF-AIIMS"
-                    className="w-full pl-9 pr-3 py-2 rounded-control bg-panel-raised border border-panel-border text-foreground text-xs font-mono placeholder:text-foreground-muted/50 focus:outline-none focus:border-accent"
+                    className="w-full pl-9 pr-3 py-2 rounded-control bg-panel-raised border border-panel-border text-foreground text-xs font-mono placeholder:text-foreground-muted/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
                     autoComplete="username"
                   />
                 </div>
@@ -139,7 +159,7 @@ export default function LoginPage() {
                     value={accessKey}
                     onChange={(e) => setAccessKey(e.target.value)}
                     placeholder="Enter assigned key"
-                    className="w-full pl-9 pr-3 py-2 rounded-control bg-panel-raised border border-panel-border text-foreground text-xs font-mono placeholder:text-foreground-muted/50 focus:outline-none focus:border-accent"
+                    className="w-full pl-9 pr-3 py-2 rounded-control bg-panel-raised border border-panel-border text-foreground text-xs font-mono placeholder:text-foreground-muted/50 focus:outline-none focus:border-accent focus:ring-1 focus:ring-accent transition-all"
                     autoComplete="current-password"
                   />
                 </div>
@@ -148,7 +168,7 @@ export default function LoginPage() {
               <button
                 type="submit"
                 disabled={isLoading}
-                className="w-full py-2.5 px-4 rounded-control bg-accent text-accent-foreground font-semibold text-xs hover:bg-accent-hover transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                className="w-full py-2.5 px-4 rounded-control bg-accent text-accent-foreground font-semibold text-xs hover:bg-accent-hover transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 shadow-md shadow-accent/20 hover:shadow-accent/30 active:scale-[0.99]"
               >
                 {isLoading ? (
                   <>
@@ -175,17 +195,17 @@ export default function LoginPage() {
                     key={pLab.labId}
                     type="button"
                     onClick={() => handleSelectPreconfiguredLab(pLab.labId)}
-                    className="w-full p-2 rounded-control text-left border border-panel-border/60 bg-panel-raised hover:bg-panel-border/40 transition-colors flex items-center justify-between text-xs group"
+                    className="w-full p-2.5 rounded-control text-left border border-panel-border/60 bg-panel-raised hover:bg-panel-border/40 hover:border-accent/40 transition-all duration-200 flex items-center justify-between text-xs group"
                   >
                     <div>
-                      <span className="font-semibold text-foreground font-mono block">
+                      <span className="font-semibold text-foreground font-mono block group-hover:text-accent transition-colors">
                         {pLab.labId}
                       </span>
                       <span className="text-[11px] text-foreground-muted">
                         {pLab.labName} • {pLab.location}
                       </span>
                     </div>
-                    <span className="text-xs text-accent font-mono group-hover:translate-x-0.5 transition-transform">
+                    <span className="text-xs text-accent font-mono group-hover:translate-x-1 transition-transform">
                       Fill →
                     </span>
                   </button>
@@ -197,7 +217,7 @@ export default function LoginPage() {
       </div>
 
       {/* Footer */}
-      <div className="max-w-md mx-auto w-full pt-4">
+      <div className="max-w-md mx-auto w-full pt-4 relative z-10">
         <UseStatement variant="compact" className="text-center" />
       </div>
     </div>

@@ -19,6 +19,10 @@ import {
   Clock,
   FlaskConical,
   BookOpen,
+  Activity,
+  Cpu,
+  Layers,
+  ChevronRight,
 } from "lucide-react";
 
 export default function OverviewPage() {
@@ -33,7 +37,7 @@ export default function OverviewPage() {
       setIsLoading(true);
       try {
         const [analysesRes, demoRes, benchRes] = await Promise.all([
-          api.getAnalyses({ limit: 5 }),
+          api.getAnalyses({ limit: 6 }),
           api.getDemoDatasets(),
           api.getBenchmarks(),
         ]);
@@ -49,27 +53,36 @@ export default function OverviewPage() {
     loadOverviewData();
   }, []);
 
-  const completedCount = recentAnalyses.filter((a) => a.status === "COMPLETED").length;
+  const completedCount = recentAnalyses.filter(
+    (a) => a.status === "COMPLETED" || (a.status as string) === "COMPLETED_WITH_WARNINGS"
+  ).length;
   const processingCount = recentAnalyses.filter(
     (a) => a.status === "QUEUED" || a.status === "VALIDATING" || a.status === "ANALYZING" || a.status === "INTERPRETING"
   ).length;
+  const totalDiscordance = recentAnalyses.reduce(
+    (acc, curr) => acc + (curr.counts?.openDiscordance || 0),
+    0
+  );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 animate-fade-in">
       {/* Welcome & Lab Banner */}
-      <div className="p-6 rounded-card border border-panel-border bg-panel shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
-        <div className="space-y-1.5">
-          <div className="flex items-center gap-2">
+      <div className="p-6 rounded-card border border-panel-border bg-panel shadow-sm relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-5 transition-all duration-300">
+        {/* Subtle accent corner glow */}
+        <div className="absolute -top-12 -right-12 w-48 h-48 rounded-full bg-accent/10 blur-2xl pointer-events-none" />
+
+        <div className="space-y-2 relative z-10">
+          <div className="flex flex-wrap items-center gap-2">
             <span className="text-xs font-mono uppercase text-accent font-semibold tracking-wider flex items-center gap-1.5">
               <Building className="w-3.5 h-3.5" />
               <span>Laboratory Workspace</span>
             </span>
             <span className="text-panel-border">•</span>
-            <span className="text-xs font-mono text-teal-300 bg-teal-950/60 px-2 py-0.5 rounded border border-teal-500/30 flex items-center gap-1">
+            <span className="text-xs font-mono text-teal-400 bg-teal-950/40 dark:bg-teal-950/60 px-2 py-0.5 rounded border border-teal-500/30 flex items-center gap-1">
               <ShieldCheck className="w-3 h-3" /> Scoped
             </span>
           </div>
-          <h1 className="text-2xl font-bold text-foreground tracking-tight">
+          <h1 className="text-2xl sm:text-3xl font-extrabold text-foreground tracking-tight">
             Welcome, {labProfile?.labName || "Laboratory Team"}
           </h1>
           <p className="text-xs text-foreground-muted max-w-2xl leading-relaxed">
@@ -78,17 +91,17 @@ export default function OverviewPage() {
           </p>
         </div>
 
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3 relative z-10">
           <Link
             href="/analyses/new"
-            className="px-4 py-2.5 rounded-control bg-accent text-accent-foreground font-semibold hover:bg-accent-hover transition-colors flex items-center gap-2 text-xs shadow-sm"
+            className="px-4 py-2.5 rounded-control bg-accent text-accent-foreground font-semibold hover:bg-accent-hover transition-all duration-200 flex items-center gap-2 text-xs shadow-md shadow-accent/20 hover:shadow-accent/30 hover:scale-[1.02] active:scale-[0.98]"
           >
             <FilePlus2 className="w-4 h-4" />
             <span>New Analysis</span>
           </Link>
           <Link
             href="/discordance"
-            className="px-4 py-2.5 rounded-control bg-panel-raised border border-panel-border hover:bg-panel-border/50 text-foreground font-semibold transition-colors flex items-center gap-2 text-xs"
+            className="px-4 py-2.5 rounded-control bg-panel-raised border border-panel-border hover:bg-panel-border/50 text-foreground font-semibold transition-all duration-200 flex items-center gap-2 text-xs hover:border-rose-500/40"
           >
             <GitCompare className="w-4 h-4 text-rose-400" />
             <span>Review Discordance</span>
@@ -96,27 +109,90 @@ export default function OverviewPage() {
         </div>
       </div>
 
+      {/* Live System Telemetry / Stats Cards */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4">
+        {/* Card 1: Total Analyses */}
+        <div className="p-4 rounded-card border border-panel-border bg-panel hover-lift space-y-1">
+          <div className="flex items-center justify-between text-foreground-muted">
+            <span className="text-[11px] font-mono uppercase tracking-wide">Analyses In Scope</span>
+            <Activity className="w-4 h-4 text-accent" />
+          </div>
+          <div className="text-2xl font-extrabold text-foreground font-mono">
+            {isLoading ? "..." : recentAnalyses.length}
+          </div>
+          <div className="text-[10px] text-foreground-muted flex items-center gap-1 font-mono">
+            <span className="text-teal-400 font-semibold">{completedCount}</span> completed
+          </div>
+        </div>
+
+        {/* Card 2: Active Worker Pipeline */}
+        <div className="p-4 rounded-card border border-panel-border bg-panel hover-lift space-y-1">
+          <div className="flex items-center justify-between text-foreground-muted">
+            <span className="text-[11px] font-mono uppercase tracking-wide">Worker Queue</span>
+            <span className="relative flex h-2.5 w-2.5">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-teal-500"></span>
+            </span>
+          </div>
+          <div className="text-2xl font-extrabold text-foreground font-mono">
+            {isLoading ? "..." : processingCount}
+          </div>
+          <div className="text-[10px] text-foreground-muted font-mono">
+            Live asynchronous pipeline
+          </div>
+        </div>
+
+        {/* Card 3: Discordance Flagged */}
+        <div className="p-4 rounded-card border border-panel-border bg-panel hover-lift space-y-1">
+          <div className="flex items-center justify-between text-foreground-muted">
+            <span className="text-[11px] font-mono uppercase tracking-wide">Open Discordances</span>
+            <GitCompare className="w-4 h-4 text-rose-400" />
+          </div>
+          <div className="text-2xl font-extrabold text-rose-400 font-mono">
+            {isLoading ? "..." : totalDiscordance}
+          </div>
+          <div className="text-[10px] text-rose-400/80 font-mono">
+            Requires pathologist review
+          </div>
+        </div>
+
+        {/* Card 4: Scientific Engine */}
+        <div className="p-4 rounded-card border border-panel-border bg-panel hover-lift space-y-1">
+          <div className="flex items-center justify-between text-foreground-muted">
+            <span className="text-[11px] font-mono uppercase tracking-wide">AMRFinderPlus Engine</span>
+            <Cpu className="w-4 h-4 text-accent" />
+          </div>
+          <div className="text-sm font-bold text-foreground font-mono truncate pt-1">
+            v4.2.7 (NCBI)
+          </div>
+          <div className="text-[10px] text-foreground-muted font-mono truncate">
+            DB: 2026-08-07.1
+          </div>
+        </div>
+      </div>
+
       {/* Primary Differentiator Showcase Banner */}
-      <div className="p-4 rounded-card border border-rose-500/30 bg-rose-950/15 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="p-4 rounded-card border border-rose-500/30 bg-rose-950/15 dark:bg-rose-950/20 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition-colors duration-300">
         <div className="flex items-start gap-3">
           <div className="p-2 rounded bg-rose-500/10 text-rose-400 border border-rose-500/20 shrink-0 mt-0.5">
-            <GitCompare className="w-5 h-5" />
+            <GitCompare className="w-5 h-5 animate-pulse-subtle" />
           </div>
           <div>
-            <span className="text-xs font-mono uppercase font-bold text-rose-300">
+            <span className="text-xs font-mono uppercase font-bold text-rose-400">
               Primary Differentiator • Laboratory Discrepancy Auditing
             </span>
             <p className="text-xs text-foreground/90 mt-0.5 max-w-2xl">
-              Unlike gene-listing databases or black-box ML models, Genome Firewall prioritizes discrepancies between
+              Unlike gene-listing databases or unvalidated models, Genome Firewall prioritizes discrepancies between
               genotypic resistance mechanisms and phenotypic laboratory AST results to guide quality assurance and investigate putative novel mechanisms.
             </p>
           </div>
         </div>
         <Link
           href="/discordance"
-          className="text-xs font-mono font-semibold text-rose-300 hover:text-rose-200 flex items-center gap-1 shrink-0"
+          className="text-xs font-mono font-semibold text-rose-400 hover:text-rose-300 flex items-center gap-1 shrink-0 group"
         >
-          <span>Open Queue →</span>
+          <span>Open Queue</span>
+          <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
         </Link>
       </div>
 
@@ -133,9 +209,10 @@ export default function OverviewPage() {
             </div>
             <Link
               href="/analyses"
-              className="text-xs font-mono text-accent hover:underline flex items-center gap-1"
+              className="text-xs font-mono text-accent hover:underline flex items-center gap-1 group"
             >
-              <span>View All History →</span>
+              <span>View All History</span>
+              <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
 
@@ -150,7 +227,7 @@ export default function OverviewPage() {
               </p>
               <Link
                 href="/analyses/new"
-                className="inline-flex items-center gap-2 px-4 py-2 rounded-control bg-accent text-accent-foreground font-semibold text-xs"
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-control bg-accent text-accent-foreground font-semibold text-xs shadow-sm hover:bg-accent-hover transition-colors"
               >
                 <FilePlus2 className="w-4 h-4" />
                 <span>Upload First Genome Assembly</span>
@@ -162,23 +239,23 @@ export default function OverviewPage() {
                 <Link
                   key={item.id}
                   href={`/analyses/${item.id}`}
-                  className="p-4 rounded-card border border-panel-border bg-panel hover:bg-panel-raised transition-all flex flex-col sm:flex-row sm:items-center justify-between gap-3 group block"
+                  className="p-4 rounded-card border border-panel-border bg-panel hover:bg-panel-raised hover:border-accent/40 transition-all duration-200 flex flex-col sm:flex-row sm:items-center justify-between gap-3 group block hover-lift"
                 >
                   <div className="space-y-1">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-bold text-foreground font-mono">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-sm font-bold text-foreground font-mono group-hover:text-accent transition-colors">
                         {item.sample?.label || item.id}
                       </span>
                       <span className="text-xs text-foreground-muted italic">
                         • {item.organism}
                       </span>
                       <span
-                        className={`text-[10px] font-mono px-2 py-0.2 rounded uppercase font-semibold ${
-                          item.status === "COMPLETED"
-                            ? "bg-teal-950/60 text-teal-300 border border-teal-500/30"
+                        className={`text-[10px] font-mono px-2 py-0.5 rounded uppercase font-semibold ${
+                          item.status === "COMPLETED" || (item.status as string) === "COMPLETED_WITH_WARNINGS"
+                            ? "bg-teal-500/15 text-teal-400 border border-teal-500/30"
                             : item.status === "FAILED"
-                            ? "bg-red-950/60 text-red-300 border border-red-500/30"
-                            : "bg-amber-950/60 text-amber-300 border border-amber-500/30 animate-pulse"
+                            ? "bg-red-500/15 text-red-400 border border-red-500/30"
+                            : "bg-amber-500/15 text-amber-400 border border-amber-500/30 animate-pulse"
                         }`}
                       >
                         {item.status}
@@ -195,7 +272,7 @@ export default function OverviewPage() {
                         </span>
                       )}
                       {item.counts && item.counts.openDiscordance > 0 && (
-                        <span className="text-rose-300 font-bold flex items-center gap-1">
+                        <span className="text-rose-400 font-bold flex items-center gap-1">
                           <GitCompare className="w-3 h-3" />
                           <span>{item.counts.openDiscordance} Discordance Flag(s)</span>
                         </span>
@@ -204,8 +281,9 @@ export default function OverviewPage() {
                   </div>
 
                   <div className="flex items-center gap-2 shrink-0">
-                    <span className="text-xs text-accent font-mono group-hover:translate-x-0.5 transition-transform">
-                      Inspect Results →
+                    <span className="text-xs text-accent font-mono group-hover:translate-x-1 transition-transform flex items-center gap-1">
+                      <span>Inspect Results</span>
+                      <ChevronRight className="w-3.5 h-3.5" />
                     </span>
                   </div>
                 </Link>
@@ -227,7 +305,7 @@ export default function OverviewPage() {
             {demoDatasets.map((demo) => (
               <div
                 key={demo.id}
-                className="p-4 rounded-card border border-panel-border bg-panel space-y-3"
+                className="p-4 rounded-card border border-panel-border bg-panel space-y-3 hover-lift transition-all duration-200 hover:border-purple-500/30"
               >
                 <div className="space-y-1">
                   <div className="flex items-center justify-between">
@@ -252,7 +330,7 @@ export default function OverviewPage() {
                   {demo.expectedDiscordanceSummary && (
                     <div>
                       <span className="text-foreground-muted">Discordance: </span>
-                      <span className="text-rose-300 font-semibold">
+                      <span className="text-rose-400 font-semibold">
                         {demo.expectedDiscordanceSummary}
                       </span>
                     </div>
@@ -267,10 +345,10 @@ export default function OverviewPage() {
                       ? "/analyses/ana_02JBX7C91D3K4L5M6N7P8Q9R0S"
                       : "/analyses/new"
                   }
-                  className="w-full py-2 px-3 rounded-control bg-panel-raised hover:bg-panel-border/50 border border-panel-border text-xs text-foreground font-semibold flex items-center justify-center gap-1.5 transition-colors font-mono"
+                  className="w-full py-2 px-3 rounded-control bg-panel-raised hover:bg-panel-border/50 border border-panel-border text-xs text-foreground font-semibold flex items-center justify-center gap-1.5 transition-all duration-200 font-mono hover:border-accent/40 group"
                 >
                   <span>Explore Dataset Analysis</span>
-                  <ArrowRight className="w-3.5 h-3.5 text-accent" />
+                  <ArrowRight className="w-3.5 h-3.5 text-accent group-hover:translate-x-1 transition-transform" />
                 </Link>
               </div>
             ))}

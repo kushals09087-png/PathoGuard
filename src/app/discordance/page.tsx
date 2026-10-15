@@ -73,13 +73,13 @@ export default function GlobalDiscordanceQueuePage() {
   return (
     <div className="space-y-6">
       {/* Page Header */}
-      <div className="p-6 rounded-card border border-rose-500/30 bg-rose-950/15 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="p-6 rounded-card border border-rose-500/30 bg-rose-500/10 dark:bg-rose-950/20 backdrop-blur-sm flex flex-col md:flex-row md:items-center justify-between gap-4 transition-all duration-300 animate-fade-in">
         <div className="space-y-1.5">
           <div className="flex items-center gap-2">
             <div className="p-1.5 rounded bg-rose-500/20 text-rose-400 border border-rose-500/30">
-              <GitCompare className="w-4 h-4" />
+              <GitCompare className="w-4 h-4 animate-pulse-subtle" />
             </div>
-            <span className="text-xs font-mono uppercase text-rose-300 font-bold tracking-wider">
+            <span className="text-xs font-mono uppercase text-rose-400 font-bold tracking-wider">
               Primary Differentiator
             </span>
           </div>

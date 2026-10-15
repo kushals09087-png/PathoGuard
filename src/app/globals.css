@@ -2,15 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
+:root,
+.dark {
   /* Default: Dark Theme ("Mission control for evidence" - Hero theme) */
-  --background: #0B1020;
-  --foreground: #F1F5F9;
+  --background: #090D1A;
+  --foreground: #F8FAFC;
   --foreground-muted: #94A3B8;
   
-  --panel: #121A2E;
-  --panel-raised: #18223B;
-  --panel-border: #26314D;
+  --panel: #0F172A;
+  --panel-raised: #162035;
+  --panel-border: #202D47;
   --panel-border-subtle: rgba(255, 255, 255, 0.08);
 
   --accent: #2DD4BF;
@@ -52,22 +53,25 @@
   --origin-synthetic: #F59E0B;
 
   --focus-ring: #2DD4BF;
+  --card-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.5);
+  --grid-line: rgba(255, 255, 255, 0.03);
 }
 
 .light {
+  /* Crisp, High-Contrast Clinical Laboratory Light Theme */
   --background: #F8FAFC;
   --foreground: #0F172A;
-  --foreground-muted: #64748B;
+  --foreground-muted: #475569;
 
   --panel: #FFFFFF;
   --panel-raised: #F1F5F9;
-  --panel-border: #DDE2EE;
-  --panel-border-subtle: rgba(0, 0, 0, 0.08);
+  --panel-border: #E2E8F0;
+  --panel-border-subtle: rgba(15, 23, 42, 0.06);
 
-  --accent: #0F766E;
-  --accent-hover: #115E59;
+  --accent: #0D9488;
+  --accent-hover: #0F766E;
   --accent-foreground: #FFFFFF;
-  --accent-subtle: rgba(15, 118, 110, 0.1);
+  --accent-subtle: rgba(13, 148, 136, 0.1);
 
   --evidence-strong: #DC2626;
   --evidence-strong-bg: #FEF2F2;
@@ -101,7 +105,9 @@
   --origin-cached: #3B82F6;
   --origin-synthetic: #D97706;
 
-  --focus-ring: #0F766E;
+  --focus-ring: #0D9488;
+  --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  --grid-line: rgba(15, 23, 42, 0.035);
 }
 
 body {
@@ -111,12 +117,126 @@ body {
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image: 
+    linear-gradient(to right, var(--grid-line) 1px, transparent 1px),
+    linear-gradient(to bottom, var(--grid-line) 1px, transparent 1px);
+  background-size: 32px 32px;
 }
 
 /* Accessible focus styling */
 :focus-visible {
   outline: 2px solid var(--focus-ring);
   outline-offset: 2px;
+}
+
+/* Glassmorphism helpers */
+.glass-panel {
+  background: var(--panel);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+.glass-card {
+  box-shadow: var(--card-shadow);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.2s ease;
+}
+
+/* Interactive Hover Lift */
+.hover-lift {
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--card-shadow);
+}
+
+/* Keyframes & Animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes pulseSubtle {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+@keyframes spinOnce {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.35s ease-out forwards;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pulse-subtle {
+  animation: pulseSubtle 3s ease-in-out infinite;
+}
+
+.animate-spin-once {
+  animation: spinOnce 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.shimmer-effect {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.08) 50%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s infinite;
+}
+
+/* Stagger animation helpers */
+.delay-100 {
+  animation-delay: 100ms;
+}
+.delay-200 {
+  animation-delay: 200ms;
+}
+.delay-300 {
+  animation-delay: 300ms;
 }
 
 /* Hatched patterns for synthetic / cached data indication */
@@ -161,6 +281,7 @@ body {
   body {
     background: #FFFFFF !important;
     color: #000000 !important;
+    background-image: none !important;
   }
   .no-print {
     display: none !important;

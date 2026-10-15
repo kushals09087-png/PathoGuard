@@ -108,22 +108,22 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
                   key={item.href}
                   href={item.href}
                   onClick={onClose}
-                  className={`flex items-center justify-between px-3 py-2.5 rounded-control text-xs font-medium transition-all ${
+                  className={`group relative flex items-center justify-between px-3 py-2.5 rounded-control text-xs font-medium transition-all duration-200 ${
                     item.active
-                      ? "bg-accent text-accent-foreground font-semibold shadow-sm"
-                      : "text-foreground-muted hover:text-foreground hover:bg-panel-raised"
+                      ? "bg-accent text-accent-foreground font-semibold shadow-sm shadow-accent/20"
+                      : "text-foreground-muted hover:text-foreground hover:bg-panel-raised hover:translate-x-1"
                   }`}
                 >
                   <div className="flex items-center gap-2.5">
-                    <Icon className="w-4 h-4 shrink-0" />
+                    <Icon className={`w-4 h-4 shrink-0 transition-transform duration-200 ${item.active ? "scale-105" : "group-hover:scale-110"}`} />
                     <span>{item.label}</span>
                   </div>
                   {item.badge && (
                     <span
-                      className={`text-[9px] font-mono uppercase px-1.5 py-0.2 rounded font-bold ${
+                      className={`text-[9px] font-mono uppercase px-1.5 py-0.5 rounded font-bold transition-all ${
                         item.active
                           ? "bg-black/20 text-accent-foreground"
-                          : "bg-rose-500/20 text-rose-300 border border-rose-500/30"
+                          : "bg-rose-500/20 text-rose-400 border border-rose-500/30 animate-pulse-subtle"
                       }`}
                     >
                       {item.badge}
