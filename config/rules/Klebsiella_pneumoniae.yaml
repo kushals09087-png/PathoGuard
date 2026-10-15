@@ -1,0 +1,77 @@
+rule_set_version: "0.1.0-seed"
+organism: "Klebsiella pneumoniae"
+rules:
+  - id: "KP-MER-001"
+    organism: "Klebsiella pneumoniae"
+    antibiotic: "meropenem"
+    match:
+      element_symbols: ["blaKPC-2", "blaKPC-3", "blaNDM-1", "blaNDM-5", "blaVIM-1", "blaIMP-4"]
+    effect: "resistance"
+    tier: "A_CURATED_STRONG"
+    rationale: "Class A KPC or metallo-beta-lactamase carbapenemase conferring robust carbapenem resistance."
+    limitations: "Genotype only; phenotype remains reference. Porin expression not measured directly."
+    sources:
+      - id: "src_kp_carb"
+        title: "Carbapenemase-producing Klebsiella pneumoniae: a key public health challenge"
+        citation: "Nordmann et al., Trends Mol Med 2009;15(4):154-161."
+        url: "https://pubmed.ncbi.nlm.nih.gov/19299208/"
+
+  - id: "KP-MER-002"
+    organism: "Klebsiella pneumoniae"
+    antibiotic: "meropenem"
+    match:
+      element_symbols: ["blaOXA-48", "blaOXA-181", "blaOXA-232"]
+    effect: "resistance"
+    tier: "B_CURATED_MODERATE"
+    rationale: "Class D OXA-48-like carbapenemase conferring weak-to-moderate carbapenem hydrolysis."
+    limitations: "Often tests susceptible in vitro unless accompanied by ESBL or porin mutations (OmpK35/36)."
+    sources:
+      - id: "src_kp_oxa"
+        title: "OXA-48 carbapenemases: the 'phantom menace'"
+        citation: "Poirel et al., J Antimicrob Chemother 2012;67(7):1597-1606."
+        url: "https://pubmed.ncbi.nlm.nih.gov/22499996/"
+
+  - id: "KP-CRO-001"
+    organism: "Klebsiella pneumoniae"
+    antibiotic: "ceftriaxone"
+    match:
+      element_symbols: ["blaCTX-M-15", "blaCTX-M-14", "blaSHV-182", "blaSHV-12", "blaSHV-2", "blaKPC-2", "blaNDM-1", "blaNDM-5"]
+    effect: "resistance"
+    tier: "A_CURATED_STRONG"
+    rationale: "Extended-spectrum beta-lactamase (CTX-M or ESBL SHV variant) or carbapenemase hydrolyzing cephalosporins."
+    limitations: "Core chromosomal wild-type blaSHV-1 or blaSHV-11 does not confer ceftriaxone resistance."
+    sources:
+      - id: "src_kp_esbl"
+        title: "Extended-spectrum beta-lactamases in Klebsiella pneumoniae"
+        citation: "Paterson & Bonomo, Clin Microbiol Rev 2005;18(4):657-686."
+        url: "https://pubmed.ncbi.nlm.nih.gov/16223952/"
+
+  - id: "KP-CIP-001"
+    organism: "Klebsiella pneumoniae"
+    antibiotic: "ciprofloxacin"
+    match:
+      element_symbols: ["gyrA_S83I", "gyrA_S83F", "parC_S80I"]
+    effect: "resistance"
+    tier: "A_CURATED_STRONG"
+    rationale: "Dual QRDR target substitutions in gyrA and parC conferring high-level fluoroquinolone resistance."
+    limitations: "A single gyrA mutation yields lower MICs compared to combined mutations."
+    sources:
+      - id: "src_kp_qrdr"
+        title: "Mechanisms of quinolone resistance in Klebsiella pneumoniae"
+        citation: "Ruiz, Int J Antimicrob Agents 2003;22(2):98-105."
+        url: "https://pubmed.ncbi.nlm.nih.gov/12927786/"
+
+  - id: "KP-GEN-001"
+    organism: "Klebsiella pneumoniae"
+    antibiotic: "gentamicin"
+    match:
+      element_symbols: ["aac(3)-IIa", "aac(3)-IId", "armA", "rmtB"]
+    effect: "resistance"
+    tier: "A_CURATED_STRONG"
+    rationale: "Aminoglycoside acetyltransferase or 16S rRNA methyltransferase."
+    limitations: "aac(6')-Ib does not confer gentamicin resistance."
+    sources:
+      - id: "src_kp_ame"
+        title: "16S rRNA methylases mediating high-level aminoglycoside resistance"
+        citation: "Doi & Arakawa, Clin Infect Dis 2007;45(1):88-94."
+        url: "https://pubmed.ncbi.nlm.nih.gov/17554707/"

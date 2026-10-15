@@ -1,0 +1,2393 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "Genome Firewall API",
+    "description": "Explainable antimicrobial-resistance evidence review and discordance platform API.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health/live": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Liveness",
+        "operationId": "liveness_health_live_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/health/ready": {
+      "get": {
+        "tags": [
+          "Health"
+        ],
+        "summary": "Readiness",
+        "operationId": "readiness_health_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HealthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/login": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Login",
+        "operationId": "login_api_v1_auth_login_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/auth/me": {
+      "get": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Get Profile",
+        "operationId": "get_profile_api_v1_auth_me_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LabProfileResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/auth/logout": {
+      "post": {
+        "tags": [
+          "Authentication"
+        ],
+        "summary": "Logout",
+        "operationId": "logout_api_v1_auth_logout_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/scope": {
+      "get": {
+        "tags": [
+          "Scope"
+        ],
+        "summary": "Get Scope",
+        "operationId": "get_scope_api_v1_scope_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScopeResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/samples": {
+      "post": {
+        "tags": [
+          "Samples & Upload"
+        ],
+        "summary": "Create Sample",
+        "operationId": "create_sample_api_v1_samples_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateSampleRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SampleResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/samples/{sample_id}/genome": {
+      "post": {
+        "tags": [
+          "Samples & Upload"
+        ],
+        "summary": "Upload Genome",
+        "operationId": "upload_genome_api_v1_samples__sample_id__genome_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "sample_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Sample Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "$ref": "#/components/schemas/Body_upload_genome_api_v1_samples__sample_id__genome_post"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/GenomeUploadResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analyses": {
+      "post": {
+        "tags": [
+          "Analyses"
+        ],
+        "summary": "Create Analysis",
+        "operationId": "create_analysis_api_v1_analyses_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAnalysisRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisStatusResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Analyses"
+        ],
+        "summary": "List Analyses",
+        "description": "Lab-scoped analysis history listing.",
+        "operationId": "list_analyses_api_v1_analyses_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "status",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Status"
+            }
+          },
+          {
+            "name": "organism",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Organism"
+            }
+          },
+          {
+            "name": "search",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Search"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 50,
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "offset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 0,
+              "title": "Offset"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AnalysisSummaryResponse"
+                  },
+                  "title": "Response List Analyses Api V1 Analyses Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analyses/{analysis_id}": {
+      "get": {
+        "tags": [
+          "Analyses"
+        ],
+        "summary": "Get Analysis Status",
+        "operationId": "get_analysis_status_api_v1_analyses__analysis_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisStatusResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analyses/{analysis_id}/results": {
+      "get": {
+        "tags": [
+          "Analyses"
+        ],
+        "summary": "Get Analysis Results",
+        "operationId": "get_analysis_results_api_v1_analyses__analysis_id__results_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisResultsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analyses/{analysis_id}/evidence": {
+      "get": {
+        "tags": [
+          "Analyses"
+        ],
+        "summary": "Get Analysis Evidence",
+        "operationId": "get_analysis_evidence_api_v1_analyses__analysis_id__evidence_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EvidenceResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analyses/{analysis_id}/report": {
+      "get": {
+        "tags": [
+          "Analyses"
+        ],
+        "summary": "Get Analysis Report",
+        "operationId": "get_analysis_report_api_v1_analyses__analysis_id__report_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "^(json|html)$",
+              "default": "json",
+              "title": "Format"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analyses/{analysis_id}/ast": {
+      "post": {
+        "tags": [
+          "Antimicrobial Susceptibility Testing"
+        ],
+        "summary": "Create Ast Result",
+        "operationId": "create_ast_result_api_v1_analyses__analysis_id__ast_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateAstRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AstResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": [
+          "Antimicrobial Susceptibility Testing"
+        ],
+        "summary": "Get Ast Results",
+        "operationId": "get_ast_results_api_v1_analyses__analysis_id__ast_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AstResponse"
+                  },
+                  "title": "Response Get Ast Results Api V1 Analyses  Analysis Id  Ast Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discordances": {
+      "get": {
+        "tags": [
+          "Discordance Review"
+        ],
+        "summary": "List Discordance Events",
+        "operationId": "list_discordance_events_api_v1_discordances_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "reviewStatus",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Reviewstatus"
+            }
+          },
+          {
+            "name": "antibiotic",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Antibiotic"
+            }
+          },
+          {
+            "name": "analysisId",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Analysisid"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/DiscordanceEventResponse"
+                  },
+                  "title": "Response List Discordance Events Api V1 Discordances Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discordances/{discordance_id}": {
+      "get": {
+        "tags": [
+          "Discordance Review"
+        ],
+        "summary": "Get Discordance Event",
+        "operationId": "get_discordance_event_api_v1_discordances__discordance_id__get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "discordance_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Discordance Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscordanceEventResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/discordances/{discordance_id}/review": {
+      "patch": {
+        "tags": [
+          "Discordance Review"
+        ],
+        "summary": "Review Discordance Event",
+        "operationId": "review_discordance_event_api_v1_discordances__discordance_id__review_patch",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "discordance_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Discordance Id"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReviewDiscordanceRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DiscordanceEventResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/benchmarks": {
+      "get": {
+        "tags": [
+          "Benchmarks"
+        ],
+        "summary": "List Benchmarks",
+        "description": "Retrieves measured per-pair reliability benchmarks on held-out evaluation datasets.",
+        "operationId": "list_benchmarks_api_v1_benchmarks_get",
+        "parameters": [
+          {
+            "name": "organism",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Organism"
+            }
+          },
+          {
+            "name": "antibiotic",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Antibiotic"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BenchmarkResponse"
+                  },
+                  "title": "Response List Benchmarks Api V1 Benchmarks Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/demo-datasets": {
+      "get": {
+        "tags": [
+          "Demo Datasets"
+        ],
+        "summary": "List Demo Datasets",
+        "description": "Lists pre-packaged demonstration datasets with clear provenance markers.",
+        "operationId": "list_demo_datasets_api_v1_demo_datasets_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/DemoDatasetResponse"
+                  },
+                  "type": "array",
+                  "title": "Response List Demo Datasets Api V1 Demo Datasets Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/demo-datasets/{dataset_id}/load": {
+      "post": {
+        "tags": [
+          "Demo Datasets"
+        ],
+        "summary": "Load Demo Dataset",
+        "description": "Loads a reproducible demo dataset into the active laboratory's workspace.",
+        "operationId": "load_demo_dataset_api_v1_demo_datasets__dataset_id__load_post",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "dataset_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Dataset Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AnalysisStatusResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/methodology": {
+      "get": {
+        "tags": [
+          "Methodology"
+        ],
+        "summary": "Get Methodology",
+        "operationId": "get_methodology_api_v1_methodology_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "AnalysisResultsResponse": {
+        "properties": {
+          "analysisId": {
+            "type": "string",
+            "title": "Analysisid"
+          },
+          "sampleId": {
+            "type": "string",
+            "title": "Sampleid"
+          },
+          "sampleLabel": {
+            "type": "string",
+            "title": "Samplelabel"
+          },
+          "organism": {
+            "type": "string",
+            "title": "Organism"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "origin": {
+            "type": "string",
+            "title": "Origin"
+          },
+          "qcSummary": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Qcsummary"
+          },
+          "findings": {
+            "items": {
+              "$ref": "#/components/schemas/FindingModel"
+            },
+            "type": "array",
+            "title": "Findings",
+            "default": []
+          },
+          "assessments": {
+            "items": {
+              "$ref": "#/components/schemas/AssessmentModel"
+            },
+            "type": "array",
+            "title": "Assessments",
+            "default": []
+          },
+          "versions": {
+            "anyOf": [
+              {
+                "additionalProperties": {
+                  "type": "string"
+                },
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Versions"
+          },
+          "disclaimer": {
+            "type": "string",
+            "title": "Disclaimer"
+          }
+        },
+        "type": "object",
+        "required": [
+          "analysisId",
+          "sampleId",
+          "sampleLabel",
+          "organism",
+          "status",
+          "origin",
+          "disclaimer"
+        ],
+        "title": "AnalysisResultsResponse"
+      },
+      "AnalysisStatusResponse": {
+        "properties": {
+          "analysisId": {
+            "type": "string",
+            "title": "Analysisid"
+          },
+          "sampleId": {
+            "type": "string",
+            "title": "Sampleid"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage"
+          },
+          "origin": {
+            "type": "string",
+            "title": "Origin",
+            "default": "REAL_ANALYSIS"
+          },
+          "createdAt": {
+            "type": "string",
+            "title": "Createdat"
+          },
+          "completedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completedat"
+          },
+          "errorCode": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Errorcode"
+          },
+          "errorMessage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Errormessage"
+          },
+          "qcSummary": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Qcsummary"
+          }
+        },
+        "type": "object",
+        "required": [
+          "analysisId",
+          "sampleId",
+          "status",
+          "createdAt"
+        ],
+        "title": "AnalysisStatusResponse"
+      },
+      "AnalysisSummaryResponse": {
+        "properties": {
+          "analysisId": {
+            "type": "string",
+            "title": "Analysisid"
+          },
+          "sampleId": {
+            "type": "string",
+            "title": "Sampleid"
+          },
+          "sampleLabel": {
+            "type": "string",
+            "title": "Samplelabel"
+          },
+          "organism": {
+            "type": "string",
+            "title": "Organism"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "stage": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Stage"
+          },
+          "origin": {
+            "type": "string",
+            "title": "Origin",
+            "default": "REAL_ANALYSIS"
+          },
+          "findingsCount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Findingscount",
+            "default": 0
+          },
+          "discordanceCount": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Discordancecount",
+            "default": 0
+          },
+          "createdAt": {
+            "type": "string",
+            "title": "Createdat"
+          },
+          "completedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Completedat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "analysisId",
+          "sampleId",
+          "sampleLabel",
+          "organism",
+          "status",
+          "createdAt"
+        ],
+        "title": "AnalysisSummaryResponse"
+      },
+      "AssessmentModel": {
+        "properties": {
+          "assessmentId": {
+            "type": "string",
+            "title": "Assessmentid"
+          },
+          "analysisId": {
+            "type": "string",
+            "title": "Analysisid"
+          },
+          "antibiotic": {
+            "type": "string",
+            "title": "Antibiotic"
+          },
+          "resultCategory": {
+            "type": "string",
+            "title": "Resultcategory"
+          },
+          "confidence": {
+            "type": "number",
+            "title": "Confidence"
+          },
+          "supportingFindingIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Supportingfindingids",
+            "default": []
+          },
+          "appliedRuleIds": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Appliedruleids",
+            "default": []
+          },
+          "mechanisms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Mechanisms",
+            "default": []
+          },
+          "limitations": {
+            "type": "string",
+            "title": "Limitations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "assessmentId",
+          "analysisId",
+          "antibiotic",
+          "resultCategory",
+          "confidence",
+          "limitations"
+        ],
+        "title": "AssessmentModel"
+      },
+      "AstResponse": {
+        "properties": {
+          "astId": {
+            "type": "string",
+            "title": "Astid"
+          },
+          "analysisId": {
+            "type": "string",
+            "title": "Analysisid"
+          },
+          "sampleId": {
+            "type": "string",
+            "title": "Sampleid"
+          },
+          "antibiotic": {
+            "type": "string",
+            "title": "Antibiotic"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "mic": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mic"
+          },
+          "micUnit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Micunit"
+          },
+          "method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Method"
+          },
+          "standard": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Standard"
+          },
+          "standardVersion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Standardversion"
+          },
+          "testDate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Testdate"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          },
+          "createdAt": {
+            "type": "string",
+            "title": "Createdat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "astId",
+          "analysisId",
+          "sampleId",
+          "antibiotic",
+          "category",
+          "createdAt"
+        ],
+        "title": "AstResponse"
+      },
+      "BenchmarkResponse": {
+        "properties": {
+          "benchmarkId": {
+            "type": "string",
+            "title": "Benchmarkid"
+          },
+          "organism": {
+            "type": "string",
+            "title": "Organism"
+          },
+          "antibiotic": {
+            "type": "string",
+            "title": "Antibiotic"
+          },
+          "sampleCount": {
+            "type": "integer",
+            "title": "Samplecount"
+          },
+          "agreementRate": {
+            "type": "number",
+            "title": "Agreementrate"
+          },
+          "ciLower": {
+            "type": "number",
+            "title": "Cilower"
+          },
+          "ciUpper": {
+            "type": "number",
+            "title": "Ciupper"
+          },
+          "abstentionRate": {
+            "type": "number",
+            "title": "Abstentionrate"
+          },
+          "backgroundDiscordanceRate": {
+            "type": "number",
+            "title": "Backgrounddiscordancerate"
+          },
+          "splitMethod": {
+            "type": "string",
+            "title": "Splitmethod"
+          },
+          "evaluationDataset": {
+            "type": "string",
+            "title": "Evaluationdataset"
+          },
+          "astStandard": {
+            "type": "string",
+            "title": "Aststandard"
+          },
+          "limitations": {
+            "type": "string",
+            "title": "Limitations"
+          }
+        },
+        "type": "object",
+        "required": [
+          "benchmarkId",
+          "organism",
+          "antibiotic",
+          "sampleCount",
+          "agreementRate",
+          "ciLower",
+          "ciUpper",
+          "abstentionRate",
+          "backgroundDiscordanceRate",
+          "splitMethod",
+          "evaluationDataset",
+          "astStandard",
+          "limitations"
+        ],
+        "title": "BenchmarkResponse"
+      },
+      "Body_upload_genome_api_v1_samples__sample_id__genome_post": {
+        "properties": {
+          "file": {
+            "type": "string",
+            "contentMediaType": "application/octet-stream",
+            "title": "File"
+          }
+        },
+        "type": "object",
+        "required": [
+          "file"
+        ],
+        "title": "Body_upload_genome_api_v1_samples__sample_id__genome_post"
+      },
+      "CreateAnalysisRequest": {
+        "properties": {
+          "sampleId": {
+            "type": "string",
+            "title": "Sampleid"
+          },
+          "fileId": {
+            "type": "string",
+            "title": "Fileid"
+          },
+          "idempotencyKey": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Idempotencykey"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sampleId",
+          "fileId"
+        ],
+        "title": "CreateAnalysisRequest"
+      },
+      "CreateAstRequest": {
+        "properties": {
+          "antibiotic": {
+            "type": "string",
+            "title": "Antibiotic"
+          },
+          "category": {
+            "type": "string",
+            "title": "Category"
+          },
+          "mic": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mic"
+          },
+          "micUnit": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Micunit",
+            "default": "mg/L"
+          },
+          "method": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Method",
+            "default": "Broth Microdilution"
+          },
+          "standard": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Standard",
+            "default": "CLSI M100-ED34"
+          },
+          "standardVersion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Standardversion",
+            "default": "2024"
+          },
+          "testDate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Testdate"
+          },
+          "notes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Notes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "antibiotic",
+          "category"
+        ],
+        "title": "CreateAstRequest"
+      },
+      "CreateSampleRequest": {
+        "properties": {
+          "sampleLabel": {
+            "type": "string",
+            "title": "Samplelabel"
+          },
+          "organism": {
+            "type": "string",
+            "title": "Organism"
+          },
+          "collectionDate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Collectiondate"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sampleLabel",
+          "organism"
+        ],
+        "title": "CreateSampleRequest"
+      },
+      "DemoDatasetResponse": {
+        "properties": {
+          "datasetId": {
+            "type": "string",
+            "title": "Datasetid"
+          },
+          "label": {
+            "type": "string",
+            "title": "Label"
+          },
+          "organism": {
+            "type": "string",
+            "title": "Organism"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "origin": {
+            "type": "string",
+            "title": "Origin"
+          },
+          "qcMetrics": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Qcmetrics"
+          },
+          "findingsCount": {
+            "type": "integer",
+            "title": "Findingscount"
+          },
+          "discordanceCount": {
+            "type": "integer",
+            "title": "Discordancecount"
+          },
+          "hasAst": {
+            "type": "boolean",
+            "title": "Hasast"
+          },
+          "analysisId": {
+            "type": "string",
+            "title": "Analysisid"
+          }
+        },
+        "type": "object",
+        "required": [
+          "datasetId",
+          "label",
+          "organism",
+          "description",
+          "origin",
+          "qcMetrics",
+          "findingsCount",
+          "discordanceCount",
+          "hasAst",
+          "analysisId"
+        ],
+        "title": "DemoDatasetResponse"
+      },
+      "DiscordanceEventResponse": {
+        "properties": {
+          "discordanceId": {
+            "type": "string",
+            "title": "Discordanceid"
+          },
+          "analysisId": {
+            "type": "string",
+            "title": "Analysisid"
+          },
+          "sampleId": {
+            "type": "string",
+            "title": "Sampleid"
+          },
+          "antibiotic": {
+            "type": "string",
+            "title": "Antibiotic"
+          },
+          "discordanceType": {
+            "type": "string",
+            "title": "Discordancetype"
+          },
+          "genomicCategory": {
+            "type": "string",
+            "title": "Genomiccategory"
+          },
+          "astCategory": {
+            "type": "string",
+            "title": "Astcategory"
+          },
+          "reviewStatus": {
+            "type": "string",
+            "title": "Reviewstatus"
+          },
+          "reviewNotes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewnotes"
+          },
+          "reviewedBy": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewedby"
+          },
+          "reviewedAt": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewedat"
+          },
+          "priorityScore": {
+            "type": "integer",
+            "title": "Priorityscore"
+          },
+          "explanation": {
+            "type": "string",
+            "title": "Explanation"
+          },
+          "pairReliabilitySnapshot": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Pairreliabilitysnapshot"
+          },
+          "createdAt": {
+            "type": "string",
+            "title": "Createdat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "discordanceId",
+          "analysisId",
+          "sampleId",
+          "antibiotic",
+          "discordanceType",
+          "genomicCategory",
+          "astCategory",
+          "reviewStatus",
+          "priorityScore",
+          "explanation",
+          "createdAt"
+        ],
+        "title": "DiscordanceEventResponse"
+      },
+      "EvidenceResponse": {
+        "properties": {
+          "analysisId": {
+            "type": "string",
+            "title": "Analysisid"
+          },
+          "findings": {
+            "items": {
+              "$ref": "#/components/schemas/FindingModel"
+            },
+            "type": "array",
+            "title": "Findings"
+          },
+          "links": {
+            "items": {
+              "additionalProperties": true,
+              "type": "object"
+            },
+            "type": "array",
+            "title": "Links"
+          }
+        },
+        "type": "object",
+        "required": [
+          "analysisId",
+          "findings",
+          "links"
+        ],
+        "title": "EvidenceResponse"
+      },
+      "FindingModel": {
+        "properties": {
+          "findingId": {
+            "type": "string",
+            "title": "Findingid"
+          },
+          "geneSymbol": {
+            "type": "string",
+            "title": "Genesymbol"
+          },
+          "sequenceName": {
+            "type": "string",
+            "title": "Sequencename"
+          },
+          "drugClass": {
+            "type": "string",
+            "title": "Drugclass"
+          },
+          "subclass": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Subclass"
+          },
+          "percentIdentity": {
+            "type": "number",
+            "title": "Percentidentity"
+          },
+          "percentCoverage": {
+            "type": "number",
+            "title": "Percentcoverage"
+          },
+          "detectionMethod": {
+            "type": "string",
+            "title": "Detectionmethod"
+          },
+          "detectionQuality": {
+            "type": "string",
+            "title": "Detectionquality"
+          },
+          "elementSubtype": {
+            "type": "string",
+            "title": "Elementsubtype"
+          },
+          "coreHit": {
+            "type": "boolean",
+            "title": "Corehit"
+          },
+          "evidenceTier": {
+            "type": "string",
+            "title": "Evidencetier"
+          },
+          "sourceTool": {
+            "type": "string",
+            "title": "Sourcetool"
+          },
+          "rawHit": {
+            "anyOf": [
+              {
+                "additionalProperties": true,
+                "type": "object"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rawhit"
+          }
+        },
+        "type": "object",
+        "required": [
+          "findingId",
+          "geneSymbol",
+          "sequenceName",
+          "drugClass",
+          "percentIdentity",
+          "percentCoverage",
+          "detectionMethod",
+          "detectionQuality",
+          "elementSubtype",
+          "coreHit",
+          "evidenceTier",
+          "sourceTool"
+        ],
+        "title": "FindingModel"
+      },
+      "GenomeUploadResponse": {
+        "properties": {
+          "fileId": {
+            "type": "string",
+            "title": "Fileid"
+          },
+          "sampleId": {
+            "type": "string",
+            "title": "Sampleid"
+          },
+          "filename": {
+            "type": "string",
+            "title": "Filename"
+          },
+          "fileSize": {
+            "type": "integer",
+            "title": "Filesize"
+          },
+          "sha256": {
+            "type": "string",
+            "title": "Sha256"
+          },
+          "validationStatus": {
+            "type": "string",
+            "title": "Validationstatus"
+          },
+          "createdAt": {
+            "type": "string",
+            "title": "Createdat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "fileId",
+          "sampleId",
+          "filename",
+          "fileSize",
+          "sha256",
+          "validationStatus",
+          "createdAt"
+        ],
+        "title": "GenomeUploadResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "HealthResponse": {
+        "properties": {
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "timestamp": {
+            "type": "string",
+            "title": "Timestamp"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "database": {
+            "type": "string",
+            "title": "Database"
+          },
+          "storage": {
+            "type": "string",
+            "title": "Storage"
+          }
+        },
+        "type": "object",
+        "required": [
+          "status",
+          "timestamp",
+          "version",
+          "database",
+          "storage"
+        ],
+        "title": "HealthResponse"
+      },
+      "LabProfileResponse": {
+        "properties": {
+          "labId": {
+            "type": "string",
+            "title": "Labid"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "demoMode": {
+            "type": "boolean",
+            "title": "Demomode",
+            "default": false
+          }
+        },
+        "type": "object",
+        "required": [
+          "labId",
+          "name"
+        ],
+        "title": "LabProfileResponse"
+      },
+      "LoginRequest": {
+        "properties": {
+          "labId": {
+            "type": "string",
+            "title": "Labid"
+          },
+          "password": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Password"
+          },
+          "accessKey": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Accesskey"
+          }
+        },
+        "type": "object",
+        "required": [
+          "labId"
+        ],
+        "title": "LoginRequest"
+      },
+      "LoginResponse": {
+        "properties": {
+          "token": {
+            "type": "string",
+            "title": "Token"
+          },
+          "lab": {
+            "$ref": "#/components/schemas/LabProfileResponse"
+          }
+        },
+        "type": "object",
+        "required": [
+          "token",
+          "lab"
+        ],
+        "title": "LoginResponse"
+      },
+      "ReviewDiscordanceRequest": {
+        "properties": {
+          "reviewStatus": {
+            "type": "string",
+            "title": "Reviewstatus"
+          },
+          "reviewNotes": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reviewnotes"
+          }
+        },
+        "type": "object",
+        "required": [
+          "reviewStatus"
+        ],
+        "title": "ReviewDiscordanceRequest"
+      },
+      "SampleResponse": {
+        "properties": {
+          "sampleId": {
+            "type": "string",
+            "title": "Sampleid"
+          },
+          "labId": {
+            "type": "string",
+            "title": "Labid"
+          },
+          "sampleLabel": {
+            "type": "string",
+            "title": "Samplelabel"
+          },
+          "organism": {
+            "type": "string",
+            "title": "Organism"
+          },
+          "collectionDate": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Collectiondate"
+          },
+          "source": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Source"
+          },
+          "createdAt": {
+            "type": "string",
+            "title": "Createdat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "sampleId",
+          "labId",
+          "sampleLabel",
+          "organism",
+          "createdAt"
+        ],
+        "title": "SampleResponse"
+      },
+      "ScopeResponse": {
+        "properties": {
+          "organisms": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Organisms"
+          },
+          "antibiotics": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Antibiotics"
+          },
+          "pairs": {
+            "additionalProperties": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "type": "object",
+            "title": "Pairs"
+          }
+        },
+        "type": "object",
+        "required": [
+          "organisms",
+          "antibiotics",
+          "pairs"
+        ],
+        "title": "ScopeResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          },
+          "input": {
+            "title": "Input"
+          },
+          "ctx": {
+            "type": "object",
+            "title": "Context"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      }
+    },
+    "securitySchemes": {
+      "HTTPBearer": {
+        "type": "http",
+        "scheme": "bearer"
+      }
+    }
+  }
+}

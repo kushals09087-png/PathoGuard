@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Default: Dark Theme ("Mission control for evidence" - Hero theme) */
+  --background: #0B1020;
+  --foreground: #F1F5F9;
+  --foreground-muted: #94A3B8;
+  
+  --panel: #121A2E;
+  --panel-raised: #18223B;
+  --panel-border: #26314D;
+  --panel-border-subtle: rgba(255, 255, 255, 0.08);
+
+  --accent: #2DD4BF;
+  --accent-hover: #14B8A6;
+  --accent-foreground: #042F2E;
+  --accent-subtle: rgba(45, 212, 191, 0.12);
+
+  /* Scientific Evidence Semantics - No green "safe" color */
+  --evidence-strong: #EF4444;
+  --evidence-strong-bg: rgba(239, 68, 68, 0.15);
+  --evidence-strong-border: rgba(239, 68, 68, 0.35);
+
+  --evidence-moderate: #F97316;
+  --evidence-moderate-bg: rgba(249, 115, 22, 0.15);
+  --evidence-moderate-border: rgba(249, 115, 22, 0.35);
+
+  --evidence-weak: #F59E0B;
+  --evidence-weak-bg: rgba(245, 158, 11, 0.15);
+  --evidence-weak-border: rgba(245, 158, 11, 0.35);
+
+  --evidence-inconclusive: #A855F7;
+  --evidence-inconclusive-bg: rgba(168, 85, 247, 0.15);
+  --evidence-inconclusive-border: rgba(168, 85, 247, 0.35);
+
+  --evidence-insufficient: #94A3B8;
+  --evidence-insufficient-bg: rgba(148, 163, 184, 0.12);
+  --evidence-insufficient-border: rgba(148, 163, 184, 0.25);
+
+  --evidence-unassessable: #64748B;
+  --evidence-unassessable-bg: rgba(100, 116, 139, 0.12);
+  --evidence-unassessable-border: rgba(100, 116, 139, 0.25);
+
+  --evidence-discordance: #F43F5E;
+  --evidence-discordance-bg: rgba(244, 63, 94, 0.15);
+  --evidence-discordance-border: rgba(244, 63, 94, 0.5);
+
+  --origin-real: #3B82F6;
+  --origin-cached: #60A5FA;
+  --origin-synthetic: #F59E0B;
+
+  --focus-ring: #2DD4BF;
+}
+
+.light {
+  --background: #F8FAFC;
+  --foreground: #0F172A;
+  --foreground-muted: #64748B;
+
+  --panel: #FFFFFF;
+  --panel-raised: #F1F5F9;
+  --panel-border: #DDE2EE;
+  --panel-border-subtle: rgba(0, 0, 0, 0.08);
+
+  --accent: #0F766E;
+  --accent-hover: #115E59;
+  --accent-foreground: #FFFFFF;
+  --accent-subtle: rgba(15, 118, 110, 0.1);
+
+  --evidence-strong: #DC2626;
+  --evidence-strong-bg: #FEF2F2;
+  --evidence-strong-border: #FCA5A5;
+
+  --evidence-moderate: #EA580C;
+  --evidence-moderate-bg: #FFF7ED;
+  --evidence-moderate-border: #FDBA74;
+
+  --evidence-weak: #D97706;
+  --evidence-weak-bg: #FFFBEB;
+  --evidence-weak-border: #FCD34D;
+
+  --evidence-inconclusive: #9333EA;
+  --evidence-inconclusive-bg: #FAF5FF;
+  --evidence-inconclusive-border: #D8B4FE;
+
+  --evidence-insufficient: #64748B;
+  --evidence-insufficient-bg: #F8FAFC;
+  --evidence-insufficient-border: #CBD5E1;
+
+  --evidence-unassessable: #475569;
+  --evidence-unassessable-bg: #F1F5F9;
+  --evidence-unassessable-border: #94A3B8;
+
+  --evidence-discordance: #E11D48;
+  --evidence-discordance-bg: #FFF1F2;
+  --evidence-discordance-border: #FDA4AF;
+
+  --origin-real: #2563EB;
+  --origin-cached: #3B82F6;
+  --origin-synthetic: #D97706;
+
+  --focus-ring: #0F766E;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-inter), system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Accessible focus styling */
+:focus-visible {
+  outline: 2px solid var(--focus-ring);
+  outline-offset: 2px;
+}
+
+/* Hatched patterns for synthetic / cached data indication */
+.pattern-hatched-synthetic {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(245, 158, 11, 0.08) 10px,
+    rgba(245, 158, 11, 0.08) 20px
+  );
+}
+
+.pattern-hatched-cached {
+  background-image: repeating-linear-gradient(
+    45deg,
+    transparent,
+    transparent 10px,
+    rgba(59, 130, 246, 0.08) 10px,
+    rgba(59, 130, 246, 0.08) 20px
+  );
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--background);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--panel-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--foreground-muted);
+}
+
+/* Print Styles for Printable Report */
+@media print {
+  body {
+    background: #FFFFFF !important;
+    color: #000000 !important;
+  }
+  .no-print {
+    display: none !important;
+  }
+  .print-only {
+    display: block !important;
+  }
+  .print-page-break {
+    page-break-before: always;
+  }
+  .panel, .card {
+    border: 1px solid #CCCCCC !important;
+    background: #FFFFFF !important;
+    box-shadow: none !important;
+  }
+}

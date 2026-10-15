@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  mongodb:
+    image: mongo:7.0
+    container_name: genome_firewall_db
+    restart: always
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: genome_firewall
+    volumes:
+      - mongo_data:/data/db
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: genome_firewall_api
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017
+      - MONGODB_DATABASE=genome_firewall
+      - SECRET_KEY=genome-firewall-secure-production-secret-key-32bytes
+      - FILE_STORAGE_PATH=/app/data/storage
+      - INLINE_WORKER=false
+    volumes:
+      - file_storage:/app/data/storage
+    depends_on:
+      - mongodb
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: genome_firewall_worker
+    restart: always
+    command: ["python", "-m", "apps.worker.main"]
+    environment:
+      - MONGODB_URI=mongodb://mongodb:27017
+      - MONGODB_DATABASE=genome_firewall
+      - FILE_STORAGE_PATH=/app/data/storage
+    volumes:
+      - file_storage:/app/data/storage
+    depends_on:
+      - mongodb
+
+volumes:
+  mongo_data:
+  file_storage:

@@ -1,0 +1,13 @@
+qc_version: "0.1.0-seed"
+thresholds:
+  max_contigs: 500
+  max_n_fraction: 0.02
+  min_n50: 20000 # warning if below
+  min_gc_percent: 30.0
+  max_gc_percent: 70.0
+  length_bounds_multiplier_lower: 0.50 # hard fail if length < 50% min bound
+  length_bounds_multiplier_upper: 2.00 # hard fail if length > 200% max bound
+
+detection_quality:
+  thr_identity: 90.0
+  thr_coverage: 90.0

@@ -1,0 +1,52 @@
+use_statement: "For research and surveillance use only. Not for clinical diagnosis or treatment decisions."
+max_upload_bytes: 26214400 # 25 MB
+organisms:
+  - name: "Escherichia coli"
+    amrfinder_organism_flag: "Escherichia"
+    antibiotics:
+      - "ciprofloxacin"
+      - "ceftriaxone"
+      - "meropenem"
+      - "gentamicin"
+      - "tetracycline"
+    drug_classes:
+      ciprofloxacin: "QUINOLONE"
+      ceftriaxone: "BETA-LACTAM"
+      meropenem: "BETA-LACTAM"
+      gentamicin: "AMINOGLYCOSIDE"
+      tetracycline: "TETRACYCLINE"
+    plausible_length_mb:
+      min: 4.5
+      max: 5.8
+
+  - name: "Klebsiella pneumoniae"
+    amrfinder_organism_flag: "Klebsiella_pneumoniae"
+    antibiotics:
+      - "ciprofloxacin"
+      - "ceftriaxone"
+      - "meropenem"
+      - "gentamicin"
+    drug_classes:
+      ciprofloxacin: "QUINOLONE"
+      ceftriaxone: "BETA-LACTAM"
+      meropenem: "BETA-LACTAM"
+      gentamicin: "AMINOGLYCOSIDE"
+    plausible_length_mb:
+      min: 5.0
+      max: 6.0
+
+  - name: "Staphylococcus aureus"
+    amrfinder_organism_flag: "Staphylococcus_aureus"
+    antibiotics:
+      - "cefoxitin"
+      - "vancomycin"
+      - "erythromycin"
+      - "ciprofloxacin"
+    drug_classes:
+      cefoxitin: "BETA-LACTAM"
+      vancomycin: "GLYCOPEPTIDE"
+      erythromycin: "MACROLIDE"
+      ciprofloxacin: "QUINOLONE"
+    plausible_length_mb:
+      min: 2.6
+      max: 3.2

@@ -1,0 +1,23 @@
+# Dependencies
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+
+# Next.js build
+.next/
+out/
+
+# Environment files
+.env*.local
+
+# Database temporary files
+data/db/*.tmp
+data/storage/*.tmp
+
+# Testing
+.pytest_cache/
+coverage/
+
+# OS metadata
+.DS_Store

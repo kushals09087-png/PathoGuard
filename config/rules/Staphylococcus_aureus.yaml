@@ -1,0 +1,62 @@
+rule_set_version: "0.1.0-seed"
+organism: "Staphylococcus aureus"
+rules:
+  - id: "SA-FOX-001"
+    organism: "Staphylococcus aureus"
+    antibiotic: "cefoxitin"
+    match:
+      element_symbols: ["mecA", "mecC"]
+    effect: "resistance"
+    tier: "A_CURATED_STRONG"
+    rationale: "mecA/mecC encodes alternative penicillin-binding protein PBP2a with low affinity for beta-lactams; cefoxitin is clinical proxy for methicillin resistance."
+    limitations: "Phenotype remains reference standard; rare borderline oxacillin-resistant S. aureus (BORSA) lacks mecA."
+    sources:
+      - id: "src_sa_mec"
+        title: "CLSI M100: Cefoxitin screen for mecA-mediated oxacillin resistance"
+        citation: "CLSI M100 34th Ed, 2024; Table 2C."
+        url: "https://clsi.org"
+
+  - id: "SA-VAN-001"
+    organism: "Staphylococcus aureus"
+    antibiotic: "vancomycin"
+    match:
+      element_symbols: ["vanA", "vanB"]
+    effect: "resistance"
+    tier: "A_CURATED_STRONG"
+    rationale: "Acquired operon encoding altered peptidoglycan precursors ending in D-Ala-D-Lac (VRSA)."
+    limitations: "Most clinical vancomycin non-susceptibility (VISA/hVISA) is chromosomal cell-wall thickening and has no acquired gene marker. Absence of vanA is especially weak evidence of susceptibility."
+    sources:
+      - id: "src_sa_van"
+        title: "Vancomycin-resistant Staphylococcus aureus: mechanism and clinical detection"
+        citation: "Sievert et al., Clin Infect Dis 2008;46(5):668-674."
+        url: "https://pubmed.ncbi.nlm.nih.gov/18230037/"
+
+  - id: "SA-ERY-001"
+    organism: "Staphylococcus aureus"
+    antibiotic: "erythromycin"
+    match:
+      element_symbols: ["erm(A)", "erm(B)", "erm(C)", "msr(A)"]
+    effect: "resistance"
+    tier: "A_CURATED_STRONG"
+    rationale: "23S rRNA adenine methyltransferase (erm) conferring MLSb cross-resistance or ABC transporter efflux pump (msrA)."
+    limitations: "Inducible erm expression requires D-zone disk diffusion test to detect clindamycin cross-resistance."
+    sources:
+      - id: "src_sa_erm"
+        title: "Macrolide and lincosamide resistance in staphylococci"
+        citation: "Leclercq, Clin Infect Dis 2002;34(4):482-492."
+        url: "https://pubmed.ncbi.nlm.nih.gov/11797175/"
+
+  - id: "SA-CIP-001"
+    organism: "Staphylococcus aureus"
+    antibiotic: "ciprofloxacin"
+    match:
+      element_symbols: ["gyrA_S84L", "grlA_S80F", "grlA_S80Y"]
+    effect: "resistance"
+    tier: "B_CURATED_MODERATE"
+    rationale: "GrlA (topoisomerase IV) and GyrA (DNA gyrase) QRDR substitutions."
+    limitations: "In S. aureus, GrlA is primary target; single mutations give modest MIC rises."
+    sources:
+      - id: "src_sa_qrdr"
+        title: "Fluoroquinolone resistance in Staphylococcus aureus"
+        citation: "Hooper, Clin Infect Dis 2002;34(4):493-499."
+        url: "https://pubmed.ncbi.nlm.nih.gov/11797176/"

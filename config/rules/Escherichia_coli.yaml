@@ -1,0 +1,107 @@
+rule_set_version: "0.1.0-seed"
+organism: "Escherichia coli"
+rules:
+  - id: "EC-MER-001"
+    organism: "Escherichia coli"
+    antibiotic: "meropenem"
+    match:
+      element_symbols: ["blaNDM-1", "blaNDM-5", "blaNDM-7", "blaKPC-2", "blaKPC-3", "blaVIM-1", "blaVIM-2", "blaIMP-4", "blaIMP-1"]
+    effect: "resistance"
+    tier: "A_CURATED_STRONG"
+    rationale: "Carbapenem-hydrolyzing metallo-beta-lactamase or class A carbapenemase confers robust carbapenem resistance."
+    limitations: "Genotype only; phenotype remains reference standard. Rare expression silencing or plasmid loss can occur."
+    sources:
+      - id: "src_clsi_m100"
+        title: "CLSI M100 Performance Standards for Antimicrobial Susceptibility Testing"
+        citation: "CLSI M100 34th Ed, 2024; Table 2A-2."
+        url: "https://clsi.org"
+
+  - id: "EC-MER-002"
+    organism: "Escherichia coli"
+    antibiotic: "meropenem"
+    match:
+      element_symbols: ["blaOXA-48", "blaOXA-181", "blaOXA-232"]
+    effect: "resistance"
+    tier: "B_CURATED_MODERATE"
+    rationale: "OXA-48-like class D carbapenemase confers low-to-moderate carbapenem hydrolysis; MICs can be near breakpoint without porin loss."
+    limitations: "Isolates without concomitant ESBL or porin mutations frequently test phenotypically susceptible."
+    sources:
+      - id: "src_eucast_oxa"
+        title: "EUCAST Guidelines for detection of resistance mechanisms and specific resistances of clinical and/or epidemiological importance"
+        citation: "EUCAST 2023, Section 3.2: OXA-48-like carbapenemases."
+        url: "https://www.eucast.org"
+
+  - id: "EC-CRO-001"
+    organism: "Escherichia coli"
+    antibiotic: "ceftriaxone"
+    match:
+      element_symbols: ["blaCTX-M-15", "blaCTX-M-14", "blaCTX-M-55", "blaCTX-M-27", "blaCMY-2"]
+    effect: "resistance"
+    tier: "A_CURATED_STRONG"
+    rationale: "CTX-M family extended-spectrum beta-lactamase (ESBL) or plasmid-mediated AmpC beta-lactamase."
+    limitations: "Wild-type TEM-1 or SHV-1 do not confer ceftriaxone resistance; variant verification required."
+    sources:
+      - id: "src_amrfinder_curated"
+        title: "NCBI Reference Gene Catalog: Curated ESBL determinants"
+        citation: "Feldgarden et al., AMRFinderPlus, Sci Rep 2021;11:12728."
+        url: "https://www.ncbi.nlm.nih.gov/pathogens/antimicrobial-resistance/AMRFinder/"
+
+  - id: "EC-CIP-001"
+    organism: "Escherichia coli"
+    antibiotic: "ciprofloxacin"
+    match:
+      element_symbols: ["gyrA_S83L", "gyrA_D87N", "parC_S80I"]
+    effect: "resistance"
+    tier: "A_CURATED_STRONG"
+    rationale: "Combined QRDR missense mutations in DNA gyrase subunit A and topoisomerase IV subunit A."
+    limitations: "Single gyrA mutation confers intermediate or low-level resistance; dual mutations required for robust high-level resistance."
+    sources:
+      - id: "src_qrdr_eucast"
+        title: "EUCAST Technical Note: Fluoroquinolone resistance mechanisms in Enterobacterales"
+        citation: "Clin Microbiol Infect 2020;26:1458-1465."
+        url: "https://www.eucast.org"
+
+  - id: "EC-CIP-002"
+    organism: "Escherichia coli"
+    antibiotic: "ciprofloxacin"
+    match:
+      element_symbols: ["gyrA_S83L", "gyrA_S83W", "qnrS1", "qnrB1"]
+    effect: "resistance"
+    tier: "B_CURATED_MODERATE"
+    rationale: "Single QRDR mutation or plasmid-mediated quinolone resistance (PMQR) gene."
+    limitations: "Often yields borderline MICs or intermediate category; clinical categorization depends on breakpoint definition."
+    sources:
+      - id: "src_pmqr"
+        title: "Plasmid-mediated quinolone resistance determinants"
+        citation: "Strahilevitz et al., Clin Microbiol Rev 2009;22(4):664-688."
+        url: "https://pubmed.ncbi.nlm.nih.gov/19822894/"
+
+  - id: "EC-GEN-001"
+    organism: "Escherichia coli"
+    antibiotic: "gentamicin"
+    match:
+      element_symbols: ["aac(3)-IIa", "aac(3)-IId", "aac(3)-IVa", "ant(2'')-Ia", "armA", "rmtB"]
+    effect: "resistance"
+    tier: "A_CURATED_STRONG"
+    rationale: "Aminoglycoside (3)-N-acetyltransferase II/IV, (2'')-O-nucleotidyltransferase, or 16S rRNA methyltransferase."
+    limitations: "aac(6')-Ib affects other aminoglycosides (tobramycin/amikacin) but not gentamicin."
+    sources:
+      - id: "src_ame_ramirez"
+        title: "Aminoglycoside modifying enzymes in clinical Gram-negative bacilli"
+        citation: "Ramirez & Tolmasky, Drug Resist Updat 2010;13(6):151-171."
+        url: "https://pubmed.ncbi.nlm.nih.gov/20833577/"
+
+  - id: "EC-TET-001"
+    organism: "Escherichia coli"
+    antibiotic: "tetracycline"
+    match:
+      element_symbols: ["tet(A)", "tet(B)", "tet(M)"]
+    effect: "resistance"
+    tier: "A_CURATED_STRONG"
+    rationale: "Major facilitator superfamily (MFS) tetracycline efflux pump or ribosomal protection protein."
+    limitations: "Does not automatically confer resistance to glycylcyclines (tigecycline)."
+    sources:
+      - id: "src_tet_efflux"
+        title: "Tetracycline resistance mechanisms in bacteria"
+        citation: "Chopra & Roberts, Microbiol Mol Biol Rev 2001;65(2):232-260."
+        url: "https://pubmed.ncbi.nlm.nih.gov/11381101/"
