@@ -69,7 +69,7 @@ export const FastaDropzone: React.FC<FastaDropzoneProps> = ({
 
       if (invalidChars && invalidChars.length > seqLines.length * 0.05) {
         setValidationError(
-          "Protein-like or non-nucleotide sequence detected. Genome Firewall requires nucleotide assembly FASTA files."
+          "Protein-like or non-nucleotide sequence detected. PathoGuard requires nucleotide assembly FASTA files."
         );
         return;
       }

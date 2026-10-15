@@ -68,7 +68,7 @@ export default function ReportPage() {
   const handleDownloadJson = () => {
     if (!analysis) return;
     const reportData = {
-      title: "Genome Firewall — Explainable Resistance-Evidence Report",
+      title: "PathoGuard — Explainable Resistance-Evidence Report",
       disclaimer: MANDATORY_USE_STATEMENT,
       generatedAt: new Date().toISOString(),
       analysis,
@@ -151,10 +151,14 @@ export default function ReportPage() {
         <div className="border-b border-panel-border pb-6 flex flex-col sm:flex-row sm:items-start justify-between gap-4">
           <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded bg-accent-subtle border border-accent/40 flex items-center justify-center text-accent">
-                <ShieldAlert className="w-4 h-4" />
+              <div className="w-8 h-8 rounded overflow-hidden border border-accent/40 bg-[#0B1120] flex items-center justify-center p-0.5">
+                <img
+                  src="/pathoguard-emblem.png"
+                  alt="PathoGuard"
+                  className="w-full h-full object-contain"
+                />
               </div>
-              <span className="text-lg font-bold tracking-tight">Genome Firewall</span>
+              <span className="text-lg font-bold tracking-tight">PathoGuard</span>
             </div>
             <p className="text-xs font-mono text-foreground-muted">
               Explainable Genomic Resistance-Evidence Review Report
@@ -380,7 +384,7 @@ export default function ReportPage() {
         {/* Footer */}
         <div className="border-t border-panel-border pt-4 text-center text-[10px] font-mono text-foreground-muted space-y-1">
           <div>{MANDATORY_USE_STATEMENT}</div>
-          <div>Genome Firewall Research Consortium • Generated via Deterministic Explainability Engine</div>
+          <div>PathoGuard Research Consortium • Generated via Deterministic Explainability Engine</div>
         </div>
       </div>
     </div>
