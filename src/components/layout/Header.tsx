@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
 import {
   ShieldAlert,
@@ -38,8 +39,14 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
         )}
 
         <Link href="/" className="flex items-center gap-2.5 group">
-          <div className="relative w-8 h-8 rounded-control bg-accent-subtle border border-accent/40 flex items-center justify-center text-accent group-hover:border-accent transition-all duration-300 group-hover:shadow-[0_0_12px_rgba(45,212,191,0.35)]">
-            <ShieldAlert className="w-5 h-5 transition-transform duration-300 group-hover:scale-110" />
+          <div className="relative w-9 h-9 rounded-control overflow-hidden border border-accent/40 bg-[#0B1120] flex items-center justify-center p-0.5 group-hover:border-accent transition-all duration-300 group-hover:shadow-[0_0_12px_rgba(45,212,191,0.35)] shrink-0">
+            <Image
+              src="/pathoguard-emblem.png"
+              alt="PathoGuard Emblem"
+              width={36}
+              height={36}
+              className="w-full h-full object-contain transition-transform duration-300 group-hover:scale-105"
+            />
             <span className="absolute -top-0.5 -right-0.5 flex h-2 w-2">
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-accent"></span>
@@ -47,7 +54,7 @@ export const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
           </div>
           <div>
             <span className="text-base font-bold text-foreground tracking-tight block leading-tight group-hover:text-accent transition-colors">
-              Genome Firewall
+              PathoGuard
             </span>
             <span className="text-[10px] text-foreground-muted tracking-wide font-mono block">
               Explainable resistance-evidence review

@@ -1,26 +1,25 @@
 "use client";
 
 import React, { useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useAuth, PRECONFIGURED_LABS } from "@/context/AuthContext";
 import { UseStatement } from "@/components/common/UseStatement";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
+import { SplashScreen } from "@/components/common/SplashScreen";
 import {
-  ShieldAlert,
   Building2,
   Key,
   ArrowRight,
   Loader2,
   AlertCircle,
-  FlaskConical,
-  CheckCircle2,
-  Sparkles,
 } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
   const { login } = useAuth();
 
+  const [showSplash, setShowSplash] = useState(true);
   const [labId, setLabId] = useState("");
   const [accessKey, setAccessKey] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -63,6 +62,10 @@ export default function LoginPage() {
     setErrorMessage(null);
   };
 
+  if (showSplash) {
+    return <SplashScreen onComplete={() => setShowSplash(false)} />;
+  }
+
   return (
     <div className="relative min-h-screen bg-background flex flex-col justify-between p-4 sm:p-6 lg:p-8 overflow-hidden transition-colors duration-300">
       {/* Dynamic Ambient Background Glows */}
@@ -78,15 +81,21 @@ export default function LoginPage() {
         <div className="w-full max-w-md space-y-6 animate-fade-in-up">
           {/* Logo & Headline */}
           <div className="text-center space-y-2">
-            <div className="relative w-14 h-14 rounded-2xl bg-accent-subtle border border-accent/40 flex items-center justify-center text-accent mx-auto shadow-lg shadow-accent/10 group">
-              <ShieldAlert className="w-8 h-8 transition-transform duration-300 group-hover:scale-110" />
-              <span className="absolute -top-1 -right-1 flex h-3 w-3">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-accent opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-3 w-3 bg-accent"></span>
-              </span>
+            <div className="relative inline-block mx-auto group">
+              <div className="absolute -inset-2 bg-gradient-to-r from-teal-500/20 to-emerald-500/20 rounded-2xl blur-md" />
+              <div className="relative rounded-xl border border-panel-border bg-panel p-2 shadow-lg">
+                <Image
+                  src="/pathoguard-logo.png"
+                  alt="PathoGuard Logo"
+                  width={240}
+                  height={150}
+                  priority
+                  className="w-48 sm:w-56 h-auto drop-shadow-[0_0_15px_rgba(45,212,191,0.25)] mx-auto"
+                />
+              </div>
             </div>
-            <h1 className="text-3xl font-extrabold text-foreground tracking-tight">
-              Genome Firewall
+            <h1 className="text-2xl font-bold text-foreground tracking-tight sr-only">
+              PathoGuard
             </h1>
             <p className="text-xs text-foreground-muted font-mono max-w-xs mx-auto">
               Explainable resistance-evidence review for clinical microbiology and public-health surveillance.
