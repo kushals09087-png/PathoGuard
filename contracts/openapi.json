@@ -615,6 +615,62 @@
         }
       }
     },
+    "/api/v1/analyses/{analysis_id}/raw-output": {
+      "get": {
+        "tags": [
+          "Analyses"
+        ],
+        "summary": "Get Raw Amrfinder Output",
+        "description": "Retrieves raw AMRFinderPlus TSV output artifact for authorized inspection.",
+        "operationId": "get_raw_amrfinder_output_api_v1_analyses__analysis_id__raw_output_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          },
+          {
+            "name": "download",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "default": false,
+              "title": "Download"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/v1/analyses/{analysis_id}/ast": {
       "post": {
         "tags": [
@@ -1077,10 +1133,283 @@
           }
         }
       }
+    },
+    "/api/v1/amrfinder/status": {
+      "get": {
+        "tags": [
+          "AMRFinderPlus Server Integration"
+        ],
+        "summary": "Get Amrfinder Status",
+        "description": "Returns actual runtime availability of AMRFinderPlus binary and installed database version.",
+        "operationId": "get_amrfinder_status_api_v1_amrfinder_status_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AMRFinderStatusResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/admin/amrfinder/update": {
+      "post": {
+        "tags": [
+          "AMRFinderPlus Server Integration"
+        ],
+        "summary": "Trigger Database Update",
+        "description": "Explicit administrative database update. Does not run automatically on analysis requests.",
+        "operationId": "trigger_database_update_api_v1_admin_amrfinder_update_post",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AdminUpdateResponse"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ]
+      }
+    },
+    "/api/v1/models": {
+      "get": {
+        "tags": [
+          "Machine Learning Layer"
+        ],
+        "summary": "List Models",
+        "description": "Returns champion ML model cards and lineage-aware validation metrics.",
+        "operationId": "list_models_api_v1_models_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/ModelCardResponse"
+                  },
+                  "type": "array",
+                  "title": "Response List Models Api V1 Models Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/models/{model_id}": {
+      "get": {
+        "tags": [
+          "Machine Learning Layer"
+        ],
+        "summary": "Get Model",
+        "description": "Retrieves specific model card and feature configuration.",
+        "operationId": "get_model_api_v1_models__model_id__get",
+        "parameters": [
+          {
+            "name": "model_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Model Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ModelCardResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/analyses/{analysis_id}/ml": {
+      "get": {
+        "tags": [
+          "Machine Learning Layer"
+        ],
+        "summary": "Get Analysis Ml Predictions",
+        "description": "Returns ML predictions, confidence bands, feature attributions, and hybrid labels.",
+        "operationId": "get_analysis_ml_predictions_api_v1_analyses__analysis_id__ml_get",
+        "security": [
+          {
+            "HTTPBearer": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "analysis_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Analysis Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/MLPredictionResponse"
+                  },
+                  "title": "Response Get Analysis Ml Predictions Api V1 Analyses  Analysis Id  Ml Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "AMRFinderStatusResponse": {
+        "properties": {
+          "installed": {
+            "type": "boolean",
+            "title": "Installed"
+          },
+          "executablePath": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Executablepath"
+          },
+          "version": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Version"
+          },
+          "databaseVersion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Databaseversion"
+          },
+          "databaseInstalled": {
+            "type": "boolean",
+            "title": "Databaseinstalled"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "installed",
+          "databaseInstalled"
+        ],
+        "title": "AMRFinderStatusResponse"
+      },
+      "AdminUpdateResponse": {
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "title": "Success"
+          },
+          "returncode": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Returncode",
+            "default": 0
+          },
+          "output": {
+            "type": "string",
+            "title": "Output"
+          },
+          "error": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Error"
+          }
+        },
+        "type": "object",
+        "required": [
+          "success",
+          "output"
+        ],
+        "title": "AdminUpdateResponse"
+      },
       "AnalysisResultsResponse": {
         "properties": {
           "analysisId": {
@@ -1148,6 +1477,30 @@
               }
             ],
             "title": "Versions"
+          },
+          "mlStatus": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mlstatus",
+            "default": "AVAILABLE"
+          },
+          "rawOutputAvailable": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rawoutputavailable",
+            "default": true
           },
           "disclaimer": {
             "type": "string",
@@ -1393,6 +1746,28 @@
           "limitations": {
             "type": "string",
             "title": "Limitations"
+          },
+          "hybridLabel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hybridlabel"
+          },
+          "mlPredictionRef": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Mlpredictionref"
           }
         },
         "type": "object",
@@ -1923,7 +2298,14 @@
             "title": "Pairreliabilitysnapshot"
           },
           "createdAt": {
-            "type": "string",
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
             "title": "Createdat"
           }
         },
@@ -1938,8 +2320,7 @@
           "astCategory",
           "reviewStatus",
           "priorityScore",
-          "explanation",
-          "createdAt"
+          "explanation"
         ],
         "title": "DiscordanceEventResponse"
       },
@@ -1972,6 +2353,34 @@
           "links"
         ],
         "title": "EvidenceResponse"
+      },
+      "FeatureContributionModel": {
+        "properties": {
+          "feature": {
+            "type": "string",
+            "title": "Feature"
+          },
+          "value": {
+            "type": "number",
+            "title": "Value"
+          },
+          "weight": {
+            "type": "number",
+            "title": "Weight"
+          },
+          "contribution": {
+            "type": "number",
+            "title": "Contribution"
+          }
+        },
+        "type": "object",
+        "required": [
+          "feature",
+          "value",
+          "weight",
+          "contribution"
+        ],
+        "title": "FeatureContributionModel"
       },
       "FindingModel": {
         "properties": {
@@ -2141,6 +2550,18 @@
           "storage": {
             "type": "string",
             "title": "Storage"
+          },
+          "amrfinder": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Amrfinder",
+            "default": "OK"
           }
         },
         "type": "object",
@@ -2227,6 +2648,195 @@
           "lab"
         ],
         "title": "LoginResponse"
+      },
+      "MLPredictionResponse": {
+        "properties": {
+          "predictionId": {
+            "type": "string",
+            "title": "Predictionid"
+          },
+          "analysisId": {
+            "type": "string",
+            "title": "Analysisid"
+          },
+          "antibiotic": {
+            "type": "string",
+            "title": "Antibiotic"
+          },
+          "organism": {
+            "type": "string",
+            "title": "Organism"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status"
+          },
+          "abstained": {
+            "type": "boolean",
+            "title": "Abstained"
+          },
+          "prediction": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Prediction"
+          },
+          "score": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Score"
+          },
+          "band": {
+            "type": "string",
+            "title": "Band"
+          },
+          "modelId": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Modelid"
+          },
+          "modelVersion": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Modelversion"
+          },
+          "topFeatures": {
+            "items": {
+              "$ref": "#/components/schemas/FeatureContributionModel"
+            },
+            "type": "array",
+            "title": "Topfeatures",
+            "default": []
+          },
+          "hybridLabel": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hybridlabel"
+          },
+          "hybridExplanation": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Hybridexplanation"
+          },
+          "explanation": {
+            "type": "string",
+            "title": "Explanation"
+          },
+          "createdAt": {
+            "type": "string",
+            "title": "Createdat"
+          }
+        },
+        "type": "object",
+        "required": [
+          "predictionId",
+          "analysisId",
+          "antibiotic",
+          "organism",
+          "status",
+          "abstained",
+          "band",
+          "explanation",
+          "createdAt"
+        ],
+        "title": "MLPredictionResponse"
+      },
+      "ModelCardResponse": {
+        "properties": {
+          "modelId": {
+            "type": "string",
+            "title": "Modelid"
+          },
+          "organism": {
+            "type": "string",
+            "title": "Organism"
+          },
+          "antibiotic": {
+            "type": "string",
+            "title": "Antibiotic"
+          },
+          "version": {
+            "type": "string",
+            "title": "Version"
+          },
+          "algorithm": {
+            "type": "string",
+            "title": "Algorithm"
+          },
+          "sampleCount": {
+            "type": "integer",
+            "title": "Samplecount"
+          },
+          "metrics": {
+            "additionalProperties": true,
+            "type": "object",
+            "title": "Metrics"
+          },
+          "abstentionBand": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Abstentionband"
+          },
+          "limitations": {
+            "type": "string",
+            "title": "Limitations"
+          },
+          "status": {
+            "type": "string",
+            "title": "Status",
+            "default": "champion"
+          }
+        },
+        "type": "object",
+        "required": [
+          "modelId",
+          "organism",
+          "antibiotic",
+          "version",
+          "algorithm",
+          "sampleCount",
+          "metrics",
+          "abstentionBand",
+          "limitations"
+        ],
+        "title": "ModelCardResponse"
       },
       "ReviewDiscordanceRequest": {
         "properties": {

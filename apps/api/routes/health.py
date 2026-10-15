@@ -22,14 +22,23 @@ async def liveness():
 
 @router.get("/health/ready", response_model=HealthResponse)
 async def readiness():
+    from engine.amrfinder_runner import AMRFinderRunner
+
     db = get_db()
-    # Ping database
     labs_col = db.get_collection("labs")
     count = await labs_col.count_documents({})
 
-    # Check storage directory
     storage = StorageManager()
     storage_ok = storage.base_dir.exists()
+
+    runner = AMRFinderRunner()
+    tool_status = runner.get_tool_status()
+    amr_ok = tool_status["installed"] and tool_status["databaseInstalled"]
+    amr_desc = (
+        f"READY (v{tool_status['version']}, db: {tool_status['databaseVersion']})"
+        if amr_ok
+        else f"FALLBACK_FIXTURE ({tool_status.get('error')})"
+    )
 
     db_status = "OK" if count >= 0 else "DEGRADED"
     storage_status = "OK" if storage_ok else "ERROR"
@@ -40,4 +49,5 @@ async def readiness():
         version="1.0.0",
         database=f"{db_status} (mode: {'MongoDB' if db.is_connected_to_mongo else 'DurableJSON'})",
         storage=storage_status,
+        amrfinder=amr_desc,
     )

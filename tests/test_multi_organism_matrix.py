@@ -28,7 +28,7 @@ def test_klebsiella_pneumoniae_matrix():
         errors=[],
     )
     runner = AMRFinderRunner()
-    tsv, ver = runner.run("kp_test.fasta", "Klebsiella pneumoniae")
+    tsv, ver, *_ = runner.run("kp_test.fasta", "Klebsiella pneumoniae")
     findings = parse_amrfinder_tsv(tsv, "ana_kp_test")
 
     # K. pneumoniae MVP antibiotics: Ciprofloxacin, Ceftriaxone, Meropenem, Gentamicin
@@ -62,7 +62,7 @@ def test_staphylococcus_aureus_matrix():
         errors=[],
     )
     runner = AMRFinderRunner()
-    tsv, ver = runner.run("sa_test.fasta", "Staphylococcus aureus")
+    tsv, ver, *_ = runner.run("sa_test.fasta", "Staphylococcus aureus")
     findings = parse_amrfinder_tsv(tsv, "ana_sa_test")
 
     # S. aureus MVP antibiotics: Cefoxitin, Vancomycin, Erythromycin, Ciprofloxacin

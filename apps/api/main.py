@@ -26,6 +26,8 @@ from apps.api.routes import (
     demo,
     methodology,
     health,
+    amrfinder,
+    ml,
 )
 
 
@@ -127,6 +129,8 @@ app.include_router(discordance.router, prefix=settings.API_V1_PREFIX)
 app.include_router(benchmarks.router, prefix=settings.API_V1_PREFIX)
 app.include_router(demo.router, prefix=settings.API_V1_PREFIX)
 app.include_router(methodology.router, prefix=settings.API_V1_PREFIX)
+app.include_router(amrfinder.router, prefix=settings.API_V1_PREFIX)
+app.include_router(ml.router, prefix=settings.API_V1_PREFIX)
 
 
 def export_openapi_schema(target_path: str = "contracts/openapi.json"):

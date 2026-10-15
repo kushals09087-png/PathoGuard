@@ -25,6 +25,7 @@ from engine import (
     get_rules_provider,
     AstCategory,
 )
+from ml import predict_pair_resistance, evaluate_hybrid_decision
 from apps.worker.lease_manager import LeaseManager, get_utc_now
 
 ORGANISM_ANTIBIOTIC_SCOPE = {
@@ -108,18 +109,35 @@ class AnalysisWorker:
 
             # 6. Detection Tool Execution (Stage: ANALYZING)
             await self.lease_mgr.update_heartbeat(analysis_id, AnalysisStatus.ANALYZING)
-            tsv_output, tool_version = self.amrfinder.run(str(file_path), sample["organism"])
+            tsv_output, tool_version, db_version, raw_output, diagnostics = self.amrfinder.run(
+                str(file_path), sample["organism"]
+            )
             findings = parse_amrfinder_tsv(tsv_output, analysis_id, tool_version=tool_version)
 
-            # 7. Interpretation (Stage: INTERPRETING)
+            # Persist raw output artifact
+            raw_col = self.db.get_collection("analysis_raw_outputs")
+            await raw_col.delete_many({"analysisId": analysis_id})
+            await raw_col.insert_one({
+                "analysisId": analysis_id,
+                "labId": lab_id,
+                "rawTsv": raw_output,
+                "toolVersion": tool_version,
+                "databaseVersion": db_version,
+                "diagnostics": diagnostics,
+                "createdAt": get_utc_now(),
+            })
+
+            # 7. Interpretation & ML Inference (Stage: INTERPRETING)
             await self.lease_mgr.update_heartbeat(analysis_id, AnalysisStatus.INTERPRETING)
             organism = sample["organism"]
             target_antibiotics = ORGANISM_ANTIBIOTIC_SCOPE.get(organism, [])
 
             assessments: List[Dict[str, Any]] = []
             evidence_links: List[Dict[str, Any]] = []
+            ml_predictions: List[Dict[str, Any]] = []
 
             for abx in target_antibiotics:
+                # Deterministic rule interpretation
                 outcome = interpret_antibiotic_evidence(
                     organism=organism,
                     antibiotic=abx,
@@ -127,6 +145,24 @@ class AnalysisWorker:
                     findings=findings,
                     rules_provider=self.rules_provider,
                 )
+
+                # Machine Learning Inference (Approved ML Plan)
+                ml_outcome = predict_pair_resistance(organism, abx, findings)
+                hybrid = evaluate_hybrid_decision(outcome.result_category, ml_outcome)
+
+                pred_id = f"mlp_{analysis_id}_{abx.lower().replace(' ', '_')}"
+                ml_predictions.append({
+                    "predictionId": pred_id,
+                    "analysisId": analysis_id,
+                    "labId": lab_id,
+                    "organism": organism,
+                    "antibiotic": abx,
+                    **ml_outcome.to_dict(),
+                    "hybridLabel": hybrid.hybrid_label,
+                    "hybridExplanation": hybrid.explanation,
+                    "createdAt": get_utc_now(),
+                })
+
                 assessment_id = f"ass_{analysis_id}_{abx.lower().replace(' ', '_')}"
                 assessment_doc = {
                     "assessmentId": assessment_id,
@@ -139,6 +175,8 @@ class AnalysisWorker:
                     "appliedRuleIds": outcome.applied_rule_ids,
                     "mechanisms": outcome.mechanisms,
                     "limitations": outcome.limitations,
+                    "hybridLabel": hybrid.hybrid_label,
+                    "mlPredictionRef": pred_id,
                     "createdAt": get_utc_now(),
                 }
                 assessments.append(assessment_doc)
@@ -156,11 +194,13 @@ class AnalysisWorker:
             findings_col = self.db.get_collection("analysis_findings")
             assessments_col = self.db.get_collection("antibiotic_assessments")
             links_col = self.db.get_collection("evidence_links")
+            ml_col = self.db.get_collection("ml_predictions")
 
             # Clean any old rows from previous attempts
             await findings_col.delete_many({"analysisId": analysis_id})
             await assessments_col.delete_many({"analysisId": analysis_id})
             await links_col.delete_many({"analysisId": analysis_id})
+            await ml_col.delete_many({"analysisId": analysis_id})
 
             if findings:
                 finding_docs = [
@@ -174,6 +214,9 @@ class AnalysisWorker:
 
             if evidence_links:
                 await links_col.insert_many(evidence_links)
+
+            if ml_predictions:
+                await ml_col.insert_many(ml_predictions)
 
             # 9. Evaluate existing AST records and generate discordance events if AST was already entered
             ast_col = self.db.get_collection("ast_results")
@@ -220,17 +263,25 @@ class AnalysisWorker:
             # 10. Complete Job
             version_snapshot = {
                 "amrfinder": tool_version,
-                "database": "2024-05-02.1",
+                "database": db_version,
                 "rules": self.rules_provider.version,
+                "ml": "1.0.0",
                 "qc": "1.0.0",
             }
+
+            final_status = AnalysisStatus.COMPLETED
+            if qc_result.warnings:
+                final_status = "COMPLETED_WITH_WARNINGS"
 
             await self.lease_mgr.complete_job(
                 analysis_id,
                 {
+                    "status": final_status,
                     "qcSummary": qc_result.to_dict(),
                     "findingsCount": len(findings),
                     "versions": version_snapshot,
+                    "rawOutputAvailable": True,
+                    "mlStatus": "AVAILABLE",
                 },
             )
             return True

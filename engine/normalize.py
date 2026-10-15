@@ -1,6 +1,7 @@
 """AMRFinderPlus output normalization module.
 
-Parses standard AMRFinderPlus TSV output, extracts resistance findings,
+Parses standard AMRFinderPlus TSV output (v3.12 through v4.2+),
+extracts resistance findings including contig coordinates and strand,
 computes detection quality categories (EXACT, STRICT, PARTIAL, LOOSE, LOW_QUALITY),
 and assigns evidence tiers.
 """
@@ -28,6 +29,14 @@ class NormalizedFinding:
         evidence_tier: EvidenceTier,
         source_tool: str,
         raw_hit: Dict[str, Any],
+        contig_id: Optional[str] = None,
+        start_coord: Optional[int] = None,
+        stop_coord: Optional[int] = None,
+        strand: Optional[str] = None,
+        closest_reference_accession: Optional[str] = None,
+        closest_reference_name: Optional[str] = None,
+        hmm_accession: Optional[str] = None,
+        hmm_description: Optional[str] = None,
     ):
         self.finding_id = finding_id
         self.gene_symbol = gene_symbol
@@ -43,6 +52,14 @@ class NormalizedFinding:
         self.evidence_tier = evidence_tier
         self.source_tool = source_tool
         self.raw_hit = raw_hit
+        self.contig_id = contig_id
+        self.start_coord = start_coord
+        self.stop_coord = stop_coord
+        self.strand = strand
+        self.closest_reference_accession = closest_reference_accession
+        self.closest_reference_name = closest_reference_name
+        self.hmm_accession = hmm_accession
+        self.hmm_description = hmm_description
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -60,6 +77,14 @@ class NormalizedFinding:
             "evidenceTier": str(self.evidence_tier),
             "sourceTool": self.source_tool,
             "rawHit": self.raw_hit,
+            "contigId": self.contig_id,
+            "start": self.start_coord,
+            "stop": self.stop_coord,
+            "strand": self.strand,
+            "closestReferenceAccession": self.closest_reference_accession,
+            "closestReferenceName": self.closest_reference_name,
+            "hmmAccession": self.hmm_accession,
+            "hmmDescription": self.hmm_description,
         }
 
 
@@ -91,18 +116,26 @@ def assign_evidence_tier(quality: DetectionQuality, element_subtype: str) -> Evi
 def parse_amrfinder_tsv(
     tsv_content: str,
     analysis_id: str,
-    tool_version: str = "NCBI AMRFinderPlus v3.12.8",
+    tool_version: str = "NCBI AMRFinderPlus",
 ) -> List[NormalizedFinding]:
     """Parses AMRFinderPlus TSV output into a list of NormalizedFinding instances."""
     findings: List[NormalizedFinding] = []
     if not tsv_content or not tsv_content.strip():
         return findings
 
-    reader = csv.DictReader(io.StringIO(tsv_content.strip()), delimiter="\t")
+    # Ignore leading CLI status lines if present
+    tsv_lines = [
+        line for line in tsv_content.splitlines()
+        if not line.startswith("Running:") and not line.startswith("Software") and not line.startswith("Database") and not line.startswith("AMRFinder") and not line.startswith("Making report")
+    ]
+    cleaned_tsv = "\n".join(tsv_lines).strip()
+    if not cleaned_tsv:
+        return findings
+
+    reader = csv.DictReader(io.StringIO(cleaned_tsv), delimiter="\t")
     if not reader.fieldnames:
         return findings
 
-    # AMRFinderPlus field aliases
     def get_field(row, *aliases):
         for a in aliases:
             if a in row and row[a] is not None:
@@ -111,25 +144,40 @@ def parse_amrfinder_tsv(
 
     hit_idx = 1
     for row in reader:
-        gene_symbol = get_field(row, "Gene symbol", "Gene Symbol", "gene_symbol", "Gene")
-        if not gene_symbol:
+        gene_symbol = get_field(row, "Element symbol", "Gene symbol", "Gene Symbol", "gene_symbol", "Gene")
+        if not gene_symbol or gene_symbol == "NA":
             continue
 
-        seq_name = get_field(row, "Sequence name", "sequence_name", "Contig id", "Protein name")
+        seq_name = get_field(row, "Element name", "Sequence name", "sequence_name", "Contig id", "Protein name")
+        contig_id = get_field(row, "Contig id", "contig_id", "Contig") or None
+        
+        start_str = get_field(row, "Start", "start")
+        start_coord = int(start_str) if start_str and start_str.isdigit() else None
+        
+        stop_str = get_field(row, "Stop", "stop")
+        stop_coord = int(stop_str) if stop_str and stop_str.isdigit() else None
+        
+        strand = get_field(row, "Strand", "strand") or None
+
         drug_class = get_field(row, "Class", "class", "Drug Class").upper() or "AMR"
         subclass = get_field(row, "Subclass", "subclass", "Sub-class") or None
         method = get_field(row, "Method", "method", "Detection method") or "BLASTN"
-        element_subtype = get_field(row, "Element subtype", "element_subtype", "Subtype") or "AMR"
+        element_subtype = get_field(row, "Subtype", "Element subtype", "element_subtype") or "AMR"
         scope = get_field(row, "Scope", "scope").upper()
         core_hit = scope == "CORE" or "core" in scope.lower()
 
+        closest_ref_acc = get_field(row, "Closest reference accession", "Accession of closest sequence") or None
+        closest_ref_name = get_field(row, "Closest reference name", "Name of closest sequence") or None
+        hmm_acc = get_field(row, "HMM accession", "HMM id") or None
+        hmm_desc = get_field(row, "HMM description") or None
+
         try:
-            identity = float(get_field(row, "% Identity to reference sequence", "Identity", "% Identity", "identity") or 100.0)
+            identity = float(get_field(row, "% Identity to reference", "% Identity to reference sequence", "Identity", "% Identity", "identity") or 100.0)
         except ValueError:
             identity = 100.0
 
         try:
-            coverage = float(get_field(row, "% Coverage of reference sequence", "Coverage", "% Coverage", "coverage") or 100.0)
+            coverage = float(get_field(row, "% Coverage of reference", "% Coverage of reference sequence", "Coverage", "% Coverage", "coverage") or 100.0)
         except ValueError:
             coverage = 100.0
 
@@ -154,6 +202,14 @@ def parse_amrfinder_tsv(
             evidence_tier=tier,
             source_tool=tool_version,
             raw_hit=dict(row),
+            contig_id=contig_id,
+            start_coord=start_coord,
+            stop_coord=stop_coord,
+            strand=strand,
+            closest_reference_accession=closest_ref_acc,
+            closest_reference_name=closest_ref_name,
+            hmm_accession=hmm_acc,
+            hmm_description=hmm_desc,
         )
         findings.append(finding)
 

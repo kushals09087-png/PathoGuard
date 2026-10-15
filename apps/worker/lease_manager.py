@@ -107,7 +107,7 @@ class LeaseManager:
         analyses_col = self.db.get_collection("analyses")
         now_str = get_utc_now()
         doc_updates = {
-            "status": AnalysisStatus.COMPLETED,
+            "status": updates.get("status", AnalysisStatus.COMPLETED),
             "stage": "COMPLETED",
             "completedAt": now_str,
             "lockedBy": None,

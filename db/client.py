@@ -27,6 +27,7 @@ class JSONCollection:
         self.indexes = set()
 
     def _get_docs(self) -> List[Dict[str, Any]]:
+        self.db.reload_if_modified()
         return self.db.data.setdefault(self.name, [])
 
     def _matches(self, doc: Dict[str, Any], query: Dict[str, Any]) -> bool:
@@ -223,17 +224,28 @@ class DurableJSONDatabase:
         self.filepath.parent.mkdir(parents=True, exist_ok=True)
         self.data: Dict[str, List[Dict[str, Any]]] = {}
         self._lock = asyncio.Lock()
+        self._last_mtime: float = 0.0
         self._load()
 
     def _load(self):
         if self.filepath.exists():
             try:
+                self._last_mtime = self.filepath.stat().st_mtime
                 with open(self.filepath, "r", encoding="utf-8") as f:
                     self.data = json.load(f)
             except Exception:
                 self.data = {}
         else:
             self.data = {}
+
+    def reload_if_modified(self):
+        if self.filepath.exists():
+            try:
+                current_mtime = self.filepath.stat().st_mtime
+                if current_mtime > getattr(self, "_last_mtime", 0.0):
+                    self._load()
+            except Exception:
+                pass
 
     async def save(self):
         async with self._lock:
@@ -242,6 +254,11 @@ class DurableJSONDatabase:
             with open(temp_file, "w", encoding="utf-8") as f:
                 f.write(content)
             temp_file.replace(self.filepath)
+            if self.filepath.exists():
+                try:
+                    self._last_mtime = self.filepath.stat().st_mtime
+                except Exception:
+                    pass
 
     def get_collection(self, name: str) -> JSONCollection:
         return JSONCollection(name, self)

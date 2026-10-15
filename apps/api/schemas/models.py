@@ -129,6 +129,8 @@ class AssessmentModel(BaseModel):
     appliedRuleIds: List[str] = []
     mechanisms: List[str] = []
     limitations: str
+    hybridLabel: Optional[str] = None
+    mlPredictionRef: Optional[str] = None
 
 
 class AnalysisResultsResponse(BaseModel):
@@ -142,7 +144,70 @@ class AnalysisResultsResponse(BaseModel):
     findings: List[FindingModel] = []
     assessments: List[AssessmentModel] = []
     versions: Optional[Dict[str, str]] = None
+    mlStatus: Optional[str] = "AVAILABLE"
+    rawOutputAvailable: Optional[bool] = True
     disclaimer: str
+
+
+# -------------------------------------------------------------
+# AMRFinderPlus Status & Administration
+# -------------------------------------------------------------
+class AMRFinderStatusResponse(BaseModel):
+    installed: bool
+    executablePath: Optional[str] = None
+    version: Optional[str] = None
+    databaseVersion: Optional[str] = None
+    databaseInstalled: bool
+    error: Optional[str] = None
+
+
+class AdminUpdateResponse(BaseModel):
+    success: bool
+    returncode: Optional[int] = 0
+    output: str
+    error: Optional[str] = None
+
+
+# -------------------------------------------------------------
+# Machine Learning Schemas
+# -------------------------------------------------------------
+class FeatureContributionModel(BaseModel):
+    feature: str
+    value: float
+    weight: float
+    contribution: float
+
+
+class MLPredictionResponse(BaseModel):
+    predictionId: str
+    analysisId: str
+    antibiotic: str
+    organism: str
+    status: str
+    abstained: bool
+    prediction: Optional[str] = None
+    score: Optional[float] = None
+    band: str
+    modelId: Optional[str] = None
+    modelVersion: Optional[str] = None
+    topFeatures: List[FeatureContributionModel] = []
+    hybridLabel: Optional[str] = None
+    hybridExplanation: Optional[str] = None
+    explanation: str
+    createdAt: str
+
+
+class ModelCardResponse(BaseModel):
+    modelId: str
+    organism: str
+    antibiotic: str
+    version: str
+    algorithm: str
+    sampleCount: int
+    metrics: Dict[str, Any]
+    abstentionBand: List[float]
+    limitations: str
+    status: str = "champion"
 
 
 # -------------------------------------------------------------
@@ -255,3 +320,4 @@ class HealthResponse(BaseModel):
     version: str
     database: str
     storage: str
+    amrfinder: Optional[str] = "OK"

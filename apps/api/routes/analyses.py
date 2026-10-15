@@ -286,3 +286,42 @@ async def get_analysis_report(
         return HTMLResponse(content=render_html_report(data))
     return data
 
+
+@router.get("/{analysis_id}/raw-output")
+async def get_raw_amrfinder_output(
+    analysis_id: str,
+    download: bool = Query(False),
+    current_lab: AuthenticatedLab = Depends(get_current_lab),
+):
+    """Retrieves raw AMRFinderPlus TSV output artifact for authorized inspection."""
+    from fastapi.responses import PlainTextResponse
+
+    db = get_db()
+    analyses_col = db.get_collection("analyses")
+    raw_col = db.get_collection("analysis_raw_outputs")
+
+    ana = await analyses_col.find_one({"analysisId": analysis_id, "labId": current_lab.lab_id})
+    if not ana:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Analysis '{analysis_id}' not found in laboratory scope.",
+        )
+
+    raw_doc = await raw_col.find_one({"analysisId": analysis_id})
+    if not raw_doc or not raw_doc.get("rawTsv"):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail=f"Raw AMRFinderPlus output artifact not available for analysis '{analysis_id}'.",
+        )
+
+    headers = {}
+    if download:
+        headers["Content-Disposition"] = f'attachment; filename="{analysis_id}_amrfinder.tsv"'
+
+    return PlainTextResponse(
+        content=raw_doc["rawTsv"],
+        media_type="text/tab-separated-values",
+        headers=headers,
+    )
+
+

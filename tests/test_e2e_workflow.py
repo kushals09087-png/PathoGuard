@@ -73,7 +73,7 @@ async def test_full_e2e_user_journey():
         # 6. Retrieve Analysis Status
         status_res = await client.get(f"/api/v1/analyses/{analysis_id}", headers=headers)
         assert status_res.status_code == 200
-        assert status_res.json()["status"] == "COMPLETED"
+        assert status_res.json()["status"] in ["COMPLETED", "COMPLETED_WITH_WARNINGS"]
 
         # 7. Inspect Results & Scientific Assertions
         results_res = await client.get(f"/api/v1/analyses/{analysis_id}/results", headers=headers)
@@ -160,5 +160,5 @@ async def test_full_e2e_user_journey():
         target_summary = next((h for h in history_list if h["analysisId"] == analysis_id), None)
         assert target_summary is not None
         assert target_summary["sampleLabel"] == "ECOLI-E2E-TEST"
-        assert target_summary["status"] == "COMPLETED"
+        assert target_summary["status"] in ["COMPLETED", "COMPLETED_WITH_WARNINGS"]
         assert target_summary["discordanceCount"] == 1
