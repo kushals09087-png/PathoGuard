@@ -104,9 +104,13 @@ export default function AnalysisHistoryPage() {
             className="p-1.5 rounded bg-panel-raised border border-panel-border text-foreground text-xs focus:outline-none focus:border-accent"
           >
             <option value="ALL">All Organisms</option>
-            <option value="Escherichia coli">Escherichia coli</option>
             <option value="Klebsiella pneumoniae">Klebsiella pneumoniae</option>
+            <option value="Escherichia coli">Escherichia coli</option>
             <option value="Staphylococcus aureus">Staphylococcus aureus</option>
+            <option value="Pseudomonas aeruginosa">Pseudomonas aeruginosa</option>
+            <option value="Acinetobacter baumannii">Acinetobacter baumannii</option>
+            <option value="Enterococcus faecalis">Enterococcus faecalis</option>
+            <option value="Salmonella enterica">Salmonella enterica</option>
           </select>
 
           <select

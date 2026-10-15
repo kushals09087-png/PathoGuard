@@ -436,9 +436,13 @@ ATCGATCGATCGATCGATCGATCGATCGATCGATCGACTAGCTAGCTACGATCGATCGACTAGCTACGATCGACT
                 onChange={(e) => setOrganism(e.target.value as SupportedOrganism)}
                 className="w-full p-2.5 rounded-control bg-panel-raised border border-panel-border text-foreground text-xs font-sans focus:outline-none focus:border-accent"
               >
-                <option value="Escherichia coli">Escherichia coli</option>
-                <option value="Klebsiella pneumoniae">Klebsiella pneumoniae</option>
-                <option value="Staphylococcus aureus">Staphylococcus aureus</option>
+                <option value="Klebsiella pneumoniae">Klebsiella pneumoniae (K. pneumoniae)</option>
+                <option value="Escherichia coli">Escherichia coli (E. coli)</option>
+                <option value="Staphylococcus aureus">Staphylococcus aureus (MRSA / MSSA)</option>
+                <option value="Pseudomonas aeruginosa">Pseudomonas aeruginosa (P. aeruginosa)</option>
+                <option value="Acinetobacter baumannii">Acinetobacter baumannii (CRAB)</option>
+                <option value="Enterococcus faecalis">Enterococcus faecalis (VRE / VSE)</option>
+                <option value="Salmonella enterica">Salmonella enterica</option>
               </select>
               <div className="text-[11px] text-foreground-muted font-mono">
                 AMRFinder Organism Flag: <span className="text-accent">{currentOrgConfig?.amrfinderOrganismFlag}</span> •

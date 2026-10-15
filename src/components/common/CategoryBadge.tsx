@@ -120,6 +120,42 @@ export const CategoryBadge: React.FC<CategoryBadgeProps> = ({
         </span>
       );
 
+    case "RESISTANT":
+      return (
+        <span
+          className={`inline-flex items-center font-bold font-mono rounded border border-rose-500/40 bg-rose-500/20 text-rose-300 ${sizeClasses[size]} ${className}`}
+          role="status"
+          aria-label="Result: Resistant"
+        >
+          {showIcon && <ShieldAlert className={`${iconSizes[size]} text-rose-400 shrink-0`} />}
+          <span>RESISTANT</span>
+        </span>
+      );
+
+    case "SUSCEPTIBLE":
+      return (
+        <span
+          className={`inline-flex items-center font-bold font-mono rounded border border-emerald-500/40 bg-emerald-500/20 text-emerald-300 ${sizeClasses[size]} ${className}`}
+          role="status"
+          aria-label="Result: Susceptible"
+        >
+          {showIcon && <Shield className={`${iconSizes[size]} text-emerald-400 shrink-0`} />}
+          <span>SUSCEPTIBLE</span>
+        </span>
+      );
+
+    case "IMMUNE":
+      return (
+        <span
+          className={`inline-flex items-center font-bold font-mono rounded border border-purple-500/40 bg-purple-500/20 text-purple-300 ${sizeClasses[size]} ${className}`}
+          role="status"
+          aria-label="Result: Immune"
+        >
+          {showIcon && <ShieldAlert className={`${iconSizes[size]} text-purple-400 shrink-0`} />}
+          <span>IMMUNE</span>
+        </span>
+      );
+
     default:
       return (
         <span

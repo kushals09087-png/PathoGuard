@@ -56,17 +56,14 @@ export type ReviewStatus = "OPEN" | "REVIEWED_CONFIRMED" | "REVIEWED_DISMISSED";
 export type SupportedOrganism =
   | "Escherichia coli"
   | "Klebsiella pneumoniae"
-  | "Staphylococcus aureus";
+  | "Staphylococcus aureus"
+  | "Pseudomonas aeruginosa"
+  | "Acinetobacter baumannii"
+  | "Enterococcus faecalis"
+  | "Salmonella enterica"
+  | string;
 
-export type SupportedAntibiotic =
-  | "ciprofloxacin"
-  | "ceftriaxone"
-  | "meropenem"
-  | "gentamicin"
-  | "tetracycline"
-  | "cefoxitin"
-  | "vancomycin"
-  | "erythromycin";
+export type SupportedAntibiotic = string;
 
 export interface StageProgress {
   stage: "VALIDATING" | "ANALYZING" | "INTERPRETING";
@@ -206,6 +203,7 @@ export interface AntibioticAssessment {
   limitations: string;
   hasDiscordance: boolean;
   ruleSources?: RuleSource[];
+  phenotypeTag?: "RESISTANT" | "SUSCEPTIBLE" | "IMMUNE";
 }
 
 export interface AstResultItem {

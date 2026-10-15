@@ -25,6 +25,9 @@ import {
   Dna,
   History,
   RotateCcw,
+  ShieldAlert,
+  ShieldCheck,
+  Zap,
 } from "lucide-react";
 
 export default function AnalysisDetailPage() {
@@ -97,6 +100,19 @@ export default function AnalysisDetailPage() {
       setDrawerOpen(true);
     }
   };
+
+  const resistanceCounts = React.useMemo(() => {
+    let resistant = 0;
+    let susceptible = 0;
+    let immune = 0;
+    for (const a of assessments) {
+      const tag = (a.phenotypeTag || (a.resultCategory.includes("STRONG") ? "RESISTANT" : "SUSCEPTIBLE")).toUpperCase();
+      if (tag === "RESISTANT") resistant++;
+      else if (tag === "IMMUNE" || tag === "INTRINSIC") immune++;
+      else susceptible++;
+    }
+    return { resistant, susceptible, immune, total: assessments.length };
+  }, [assessments]);
 
   if (isLoadingAnalysis) {
     return (
@@ -292,6 +308,53 @@ export default function AnalysisDetailPage() {
               </Link>
             </div>
           )}
+
+          {/* Clinical Resistance Profile Snapshot */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs font-mono">
+            <div className="p-3.5 rounded-card border border-rose-500/30 bg-rose-950/20 flex items-center justify-between shadow-xs">
+              <div>
+                <span className="text-foreground-muted block text-[10px] uppercase font-semibold">Resistant</span>
+                <span className="text-lg font-bold text-rose-300 font-sans">{resistanceCounts.resistant}</span>
+                <span className="text-[10px] text-foreground-muted block">Acquired determinants</span>
+              </div>
+              <div className="p-2 rounded bg-rose-500/15 text-rose-400">
+                <ShieldAlert className="w-5 h-5" />
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-card border border-emerald-500/30 bg-emerald-950/20 flex items-center justify-between shadow-xs">
+              <div>
+                <span className="text-foreground-muted block text-[10px] uppercase font-semibold">Susceptible</span>
+                <span className="text-lg font-bold text-emerald-300 font-sans">{resistanceCounts.susceptible}</span>
+                <span className="text-[10px] text-foreground-muted block">Retained target sensitivity</span>
+              </div>
+              <div className="p-2 rounded bg-emerald-500/15 text-emerald-400">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-card border border-purple-500/30 bg-purple-950/20 flex items-center justify-between shadow-xs">
+              <div>
+                <span className="text-foreground-muted block text-[10px] uppercase font-semibold">Immune</span>
+                <span className="text-lg font-bold text-purple-300 font-sans">{resistanceCounts.immune}</span>
+                <span className="text-[10px] text-foreground-muted block">Intrinsic species resistance</span>
+              </div>
+              <div className="p-2 rounded bg-purple-500/15 text-purple-400">
+                <Zap className="w-5 h-5" />
+              </div>
+            </div>
+
+            <div className="p-3.5 rounded-card border border-panel-border bg-panel flex items-center justify-between shadow-xs">
+              <div>
+                <span className="text-foreground-muted block text-[10px] uppercase font-semibold">Evaluated Battery</span>
+                <span className="text-lg font-bold text-foreground font-sans">{resistanceCounts.total}</span>
+                <span className="text-[10px] text-foreground-muted block">Species-calibrated drugs</span>
+              </div>
+              <div className="p-2 rounded bg-panel-raised text-accent">
+                <Dna className="w-5 h-5" />
+              </div>
+            </div>
+          </div>
 
           {/* Antibiotic-Wise Evidence Matrix */}
           <EvidenceMatrix

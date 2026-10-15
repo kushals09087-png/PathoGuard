@@ -131,6 +131,7 @@ class AssessmentModel(BaseModel):
     limitations: str
     hybridLabel: Optional[str] = None
     mlPredictionRef: Optional[str] = None
+    phenotypeTag: Optional[str] = None
 
 
 class AnalysisResultsResponse(BaseModel):

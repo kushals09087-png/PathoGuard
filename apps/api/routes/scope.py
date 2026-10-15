@@ -5,10 +5,11 @@ from apps.api.schemas.models import ScopeResponse
 
 router = APIRouter(tags=["Scope"])
 
+from engine.clinical_profiles import CLINICAL_PANELS
+
 ORGANISM_ANTIBIOTICS = {
-    "Escherichia coli": ["Ciprofloxacin", "Ceftriaxone", "Meropenem", "Gentamicin", "Tetracycline"],
-    "Klebsiella pneumoniae": ["Ciprofloxacin", "Ceftriaxone", "Meropenem", "Gentamicin"],
-    "Staphylococcus aureus": ["Cefoxitin", "Vancomycin", "Erythromycin", "Ciprofloxacin"],
+    org: [item["antibiotic"] for item in panel]
+    for org, panel in CLINICAL_PANELS.items()
 }
 
 

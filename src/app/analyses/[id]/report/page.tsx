@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useQuery } from "@tanstack/react-query";
 import { api } from "@/lib/api";
 import { CategoryBadge } from "@/components/common/CategoryBadge";
+import { PhenotypeTagBadge } from "@/components/common/PhenotypeTagBadge";
 import { DetectionGlyph } from "@/components/common/DetectionGlyph";
 import { MANDATORY_USE_STATEMENT } from "@/lib/mockData";
 import {
@@ -235,6 +236,7 @@ export default function ReportPage() {
               <thead>
                 <tr className="border-b border-panel-border bg-panel-raised text-foreground-muted text-[11px]">
                   <th className="py-2.5 px-3">Antibiotic</th>
+                  <th className="py-2.5 px-3">Resistance Profile</th>
                   <th className="py-2.5 px-3">Genomic Evidence Assessment</th>
                   <th className="py-2.5 px-3">Tier</th>
                   <th className="py-2.5 px-3 text-center">Hits</th>
@@ -246,10 +248,14 @@ export default function ReportPage() {
                 {assessments.map((a) => {
                   const ast = astResults.find((x) => x.antibiotic === a.antibiotic);
                   const isDiscordant = discordanceEvents.some((d) => d.antibiotic === a.antibiotic);
+                  const tag = a.phenotypeTag || (a.resultCategory.includes("STRONG") ? "RESISTANT" : "SUSCEPTIBLE");
 
                   return (
                     <tr key={a.id} className="hover:bg-panel-raised/30">
                       <td className="py-2.5 px-3 font-semibold capitalize font-sans">{a.antibiotic}</td>
+                      <td className="py-2.5 px-3">
+                        <PhenotypeTagBadge phenotype={tag} size="xs" />
+                      </td>
                       <td className="py-2.5 px-3">
                         <CategoryBadge category={a.resultCategory} size="sm" />
                       </td>

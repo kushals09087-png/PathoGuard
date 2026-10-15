@@ -272,6 +272,7 @@ export const DEMO_CASE_A_ASSESSMENTS: AntibioticAssessment[] = [
     limitations:
       "Genotype assessment only. Phenotype remains the reference standard. Does not capture novel porin mutations.",
     hasDiscordance: false,
+    phenotypeTag: "RESISTANT",
     ruleSources: [
       {
         id: "src_01",
@@ -298,6 +299,7 @@ export const DEMO_CASE_A_ASSESSMENTS: AntibioticAssessment[] = [
     limitations:
       "Phenotype remains the reference. Expression levels can vary.",
     hasDiscordance: false,
+    phenotypeTag: "RESISTANT",
   },
   {
     id: "ass_01JBX5A3",
@@ -315,6 +317,7 @@ export const DEMO_CASE_A_ASSESSMENTS: AntibioticAssessment[] = [
     limitations:
       "Co-existing efflux overexpression cannot be quantified by assembly screening.",
     hasDiscordance: false,
+    phenotypeTag: "RESISTANT",
   },
   {
     id: "ass_01JBX5A4",
@@ -332,6 +335,61 @@ export const DEMO_CASE_A_ASSESSMENTS: AntibioticAssessment[] = [
     limitations:
       "No known marker detected by the pinned database. This is not evidence of susceptibility.",
     hasDiscordance: false,
+    phenotypeTag: "SUSCEPTIBLE",
+  },
+  {
+    id: "ass_01JBX5A5",
+    analysisId: DEMO_CASE_A_ID,
+    organism: "Klebsiella pneumoniae",
+    antibiotic: "ampicillin",
+    resultCategory: "RESISTANCE_EVIDENCE_STRONG",
+    evidenceTier: "A_CURATED_STRONG",
+    ruleIds: ["KP-AMP-INT"],
+    findingIds: ["fnd_01JBX4A2"],
+    capped: false,
+    reasonCode: "INTRINSIC_RESISTANCE_SPECIES",
+    explanation:
+      "Constitutive chromosomal blaSHV penicillinase expression in K. pneumoniae genome.",
+    limitations:
+      "Intrinsic species-level insensitivity documented across all Klebsiella pneumoniae isolates (EUCAST intrinsic resistance table).",
+    hasDiscordance: false,
+    phenotypeTag: "IMMUNE",
+  },
+  {
+    id: "ass_01JBX5A6",
+    analysisId: DEMO_CASE_A_ID,
+    organism: "Klebsiella pneumoniae",
+    antibiotic: "amikacin",
+    resultCategory: "INSUFFICIENT_EVIDENCE",
+    evidenceTier: "A_CURATED_STRONG",
+    ruleIds: ["KP-AMK-SUS"],
+    findingIds: [],
+    capped: false,
+    reasonCode: "NO_KNOWN_MARKER",
+    explanation:
+      "Wild-type 16S ribosomal RNA target intact; absence of 16S RMTase (armA, rmtB) determinants.",
+    limitations:
+      "Curated target preservation confirmed; reference broth microdilution correlates with low baseline MIC (<=2 mg/L).",
+    hasDiscordance: false,
+    phenotypeTag: "SUSCEPTIBLE",
+  },
+  {
+    id: "ass_01JBX5A7",
+    analysisId: DEMO_CASE_A_ID,
+    organism: "Klebsiella pneumoniae",
+    antibiotic: "colistin",
+    resultCategory: "INSUFFICIENT_EVIDENCE",
+    evidenceTier: "A_CURATED_STRONG",
+    ruleIds: ["KP-CST-SUS"],
+    findingIds: [],
+    capped: false,
+    reasonCode: "NO_KNOWN_MARKER",
+    explanation:
+      "Unmodified lipid A pathway; wild-type mgrB and pmrCAB regulatory loci intact; absence of plasmid mcr-1..10.",
+    limitations:
+      "Intact lipid A and absence of mcr phosphoethanolamine transferase confirms baseline target affinity.",
+    hasDiscordance: false,
+    phenotypeTag: "SUSCEPTIBLE",
   },
 ];
 
@@ -540,6 +598,7 @@ export const DEMO_CASE_B_ASSESSMENTS: AntibioticAssessment[] = [
     limitations:
       "Genomic presence only. Laboratory AST unexpectedly reported Susceptible (MIC <= 0.5 mg/L), generating a High-Priority Discordance Event.",
     hasDiscordance: true,
+    phenotypeTag: "RESISTANT",
   },
   {
     id: "ass_02JBX9B2",
@@ -556,6 +615,7 @@ export const DEMO_CASE_B_ASSESSMENTS: AntibioticAssessment[] = [
       "blaCTX-M-15 detected. Well-characterized ESBL conferring resistance to third-generation cephalosporins.",
     limitations: "Phenotype remains reference standard.",
     hasDiscordance: false,
+    phenotypeTag: "RESISTANT",
   },
   {
     id: "ass_02JBX9B3",
@@ -573,6 +633,7 @@ export const DEMO_CASE_B_ASSESSMENTS: AntibioticAssessment[] = [
     limitations:
       "Single QRDR substitutions often show borderline MICs; clinical susceptibility depends on breakpoint definitions.",
     hasDiscordance: false,
+    phenotypeTag: "RESISTANT",
   },
   {
     id: "ass_02JBX9B4",
@@ -590,6 +651,7 @@ export const DEMO_CASE_B_ASSESSMENTS: AntibioticAssessment[] = [
     limitations:
       "No known marker detected by the pinned database. This is not evidence of susceptibility.",
     hasDiscordance: true,
+    phenotypeTag: "SUSCEPTIBLE",
   },
   {
     id: "ass_02JBX9B5",
@@ -605,6 +667,42 @@ export const DEMO_CASE_B_ASSESSMENTS: AntibioticAssessment[] = [
     explanation: "tet(A) efflux pump gene detected.",
     limitations: "Expression levels may affect MIC magnitude.",
     hasDiscordance: false,
+    phenotypeTag: "RESISTANT",
+  },
+  {
+    id: "ass_02JBX9B6",
+    analysisId: DEMO_CASE_B_ID,
+    organism: "Escherichia coli",
+    antibiotic: "vancomycin",
+    resultCategory: "RESISTANCE_EVIDENCE_STRONG",
+    evidenceTier: "A_CURATED_STRONG",
+    ruleIds: ["EC-VAN-INT"],
+    findingIds: [],
+    capped: false,
+    reasonCode: "INTRINSIC_RESISTANCE_SPECIES",
+    explanation:
+      "Impermeable Gram-negative outer membrane lipopolysaccharide barrier prevents glycopeptide entry.",
+    limitations:
+      "Intrinsic Gram-negative resistance; molecular weight excludes outer membrane porin diffusion (EUCAST intrinsic resistance).",
+    hasDiscordance: false,
+    phenotypeTag: "IMMUNE",
+  },
+  {
+    id: "ass_02JBX9B7",
+    analysisId: DEMO_CASE_B_ID,
+    organism: "Escherichia coli",
+    antibiotic: "amikacin",
+    resultCategory: "INSUFFICIENT_EVIDENCE",
+    evidenceTier: "A_CURATED_STRONG",
+    ruleIds: ["EC-AMK-SUS"],
+    findingIds: [],
+    capped: false,
+    reasonCode: "NO_KNOWN_MARKER",
+    explanation:
+      "Absence of 16S methyltransferases and aminoglycoside modifying enzymes.",
+    limitations: "Intact ribosomal binding target.",
+    hasDiscordance: false,
+    phenotypeTag: "SUSCEPTIBLE",
   },
 ];
 

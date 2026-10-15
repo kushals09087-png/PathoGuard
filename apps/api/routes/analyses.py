@@ -237,6 +237,30 @@ async def get_analysis_results(
     )
 
 
+@router.get("/{analysis_id}/findings")
+async def get_analysis_findings_items(
+    analysis_id: str,
+    current_lab: AuthenticatedLab = Depends(get_current_lab),
+):
+    db = get_db()
+    findings_col = db.get_collection("analysis_findings")
+    raw_findings = await findings_col.find({"analysisId": analysis_id})
+    findings = [FindingModel(**f) for f in raw_findings]
+    return {"items": findings}
+
+
+@router.get("/{analysis_id}/assessments")
+async def get_analysis_assessments_items(
+    analysis_id: str,
+    current_lab: AuthenticatedLab = Depends(get_current_lab),
+):
+    db = get_db()
+    assessments_col = db.get_collection("antibiotic_assessments")
+    raw_assessments = await assessments_col.find({"analysisId": analysis_id})
+    assessments = [AssessmentModel(**a) for a in raw_assessments]
+    return {"items": assessments}
+
+
 @router.get("/{analysis_id}/evidence", response_model=EvidenceResponse)
 async def get_analysis_evidence(
     analysis_id: str,

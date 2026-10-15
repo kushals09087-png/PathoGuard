@@ -5,6 +5,7 @@ import {
   EvidenceTier,
 } from "@/types/contracts";
 import { CategoryBadge } from "../common/CategoryBadge";
+import { PhenotypeTagBadge } from "../common/PhenotypeTagBadge";
 import { DetectionGlyph } from "../common/DetectionGlyph";
 import { PairReliabilityPanel } from "./PairReliabilityPanel";
 import {
@@ -100,9 +101,10 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({
               </div>
               <h2
                 id="evidence-drawer-title"
-                className="text-xl font-bold text-foreground capitalize flex items-center gap-2"
+                className="text-xl font-bold text-foreground capitalize flex flex-wrap items-center gap-2"
               >
                 <span>{assessment.antibiotic}</span>
+                <PhenotypeTagBadge phenotype={assessment.phenotypeTag || (assessment.resultCategory.includes("STRONG") ? "RESISTANT" : "SUSCEPTIBLE")} size="sm" />
                 <CategoryBadge category={assessment.resultCategory} size="sm" />
               </h2>
             </div>
@@ -145,6 +147,10 @@ export const EvidenceDrawer: React.FC<EvidenceDrawerProps> = ({
                 <span>Applied Curated Rules & Evidence Tier</span>
               </h3>
               <div className="p-3.5 rounded-card bg-panel-raised border border-panel-border text-xs space-y-2 font-mono">
+                <div className="flex items-center justify-between pb-1.5 border-b border-panel-border/50">
+                  <span className="text-foreground-muted">Resistance Profile</span>
+                  <PhenotypeTagBadge phenotype={assessment.phenotypeTag || (assessment.resultCategory.includes("STRONG") ? "RESISTANT" : "SUSCEPTIBLE")} size="xs" />
+                </div>
                 <div className="flex items-center justify-between">
                   <span className="text-foreground-muted">Evidence Tier</span>
                   <span className="text-foreground font-semibold">

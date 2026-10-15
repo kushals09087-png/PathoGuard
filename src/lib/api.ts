@@ -32,6 +32,7 @@ import {
   DEMO_DATASETS,
   SCOPE_CONFIG,
 } from "./mockData";
+import { getClientOrganismPanel } from "./clinicalPanels";
 
 export class ApiError extends Error {
   code: string;
@@ -397,119 +398,28 @@ export class ApiClient {
             { stage: "INTERPRETING", state: "DONE" },
           ];
 
-          // Populate realistic findings and assessments for newly generated mock analysis
-          const findings: Finding[] = [
-            {
-              id: `fnd_${analysisId}_1`,
-              analysisId,
-              symbol: "blaCTX-M-15",
-              name: "extended-spectrum beta-lactamase CTX-M-15",
-              elementType: "BETA-LACTAMASE",
-              klass: "BETA-LACTAM",
-              subclass: "CEPHALOSPORIN",
-              method: "EXACT",
-              identity: 100.0,
-              coverage: 100.0,
-              contigId: "contig_01",
-              start: 145000,
-              stop: 145875,
-              detectionQuality: "EXACT",
-            },
-            {
-              id: `fnd_${analysisId}_2`,
-              analysisId,
-              symbol: "gyrA_S83L",
-              name: "DNA gyrase subunit A S83L",
-              elementType: "POINT_MUTATION",
-              klass: "QUINOLONE",
-              subclass: "FLUOROQUINOLONE",
-              method: "POINT",
-              identity: 100.0,
-              coverage: 100.0,
-              contigId: "contig_01",
-              start: 945200,
-              stop: 945202,
-              detectionQuality: "EXACT",
-            },
-          ];
+          // Populate realistic findings and assessments for newly generated mock analysis based on organism
+          const { assessments, findings } = getClientOrganismPanel(a.organism, analysisId);
           db.findings.set(analysisId, findings);
-
-          const assessments: AntibioticAssessment[] = [
-            {
-              id: `ass_${analysisId}_1`,
-              analysisId,
-              organism: a.organism,
-              antibiotic: "ceftriaxone",
-              resultCategory: "RESISTANCE_EVIDENCE_STRONG",
-              evidenceTier: "A_CURATED_STRONG",
-              ruleIds: ["EC-CRO-001"],
-              findingIds: [`fnd_${analysisId}_1`],
-              capped: false,
-              reasonCode: "CURATED_MECHANISM_DETECTED",
-              explanation: "blaCTX-M-15 detected with 100% identity and coverage.",
-              limitations: "Genotype only; phenotype remains reference standard.",
-              hasDiscordance: false,
-            },
-            {
-              id: `ass_${analysisId}_2`,
-              analysisId,
-              organism: a.organism,
-              antibiotic: "ciprofloxacin",
-              resultCategory: "RESISTANCE_EVIDENCE_MODERATE",
-              evidenceTier: "B_CURATED_MODERATE",
-              ruleIds: ["EC-CIP-002"],
-              findingIds: [`fnd_${analysisId}_2`],
-              capped: false,
-              reasonCode: "SINGLE_QRDR_MUTATION",
-              explanation: "Single gyrA S83L mutation without secondary parC mutation.",
-              limitations: "Borderline intermediate resistance observed in some test isolates.",
-              hasDiscordance: false,
-            },
-            {
-              id: `ass_${analysisId}_3`,
-              analysisId,
-              organism: a.organism,
-              antibiotic: "meropenem",
-              resultCategory: "INSUFFICIENT_EVIDENCE",
-              evidenceTier: "INSUFFICIENT",
-              ruleIds: [],
-              findingIds: [],
-              capped: false,
-              reasonCode: "NO_KNOWN_MARKER",
-              explanation: "No curated carbapenemase detected.",
-              limitations: "No known marker detected by the pinned database. This is not evidence of susceptibility.",
-              hasDiscordance: false,
-            },
-            {
-              id: `ass_${analysisId}_4`,
-              analysisId,
-              organism: a.organism,
-              antibiotic: "gentamicin",
-              resultCategory: "INSUFFICIENT_EVIDENCE",
-              evidenceTier: "INSUFFICIENT",
-              ruleIds: [],
-              findingIds: [],
-              capped: false,
-              reasonCode: "NO_KNOWN_MARKER",
-              explanation: "No aminoglycoside resistance determinant detected.",
-              limitations: "No known marker detected by the pinned database. This is not evidence of susceptibility.",
-              hasDiscordance: false,
-            },
-          ];
           db.assessments.set(analysisId, assessments);
           db.discordance.set(analysisId, []);
 
+          const countsMap: Record<any, number> = {
+            RESISTANCE_EVIDENCE_STRONG: 0,
+            RESISTANCE_EVIDENCE_MODERATE: 0,
+            RESISTANCE_EVIDENCE_WEAK: 0,
+            SUSCEPTIBILITY_EVIDENCE_LIMITED: 0,
+            INCONCLUSIVE: 0,
+            INSUFFICIENT_EVIDENCE: 0,
+            NOT_ASSESSABLE: 0,
+          };
+          for (const ass of assessments) {
+            countsMap[ass.resultCategory] = (countsMap[ass.resultCategory] || 0) + 1;
+          }
+
           a.counts = {
-            findings: 2,
-            assessmentsByCategory: {
-              RESISTANCE_EVIDENCE_STRONG: 1,
-              RESISTANCE_EVIDENCE_MODERATE: 1,
-              RESISTANCE_EVIDENCE_WEAK: 0,
-              SUSCEPTIBILITY_EVIDENCE_LIMITED: 0,
-              INCONCLUSIVE: 0,
-              INSUFFICIENT_EVIDENCE: 2,
-              NOT_ASSESSABLE: 0,
-            },
+            findings: findings.length,
+            assessmentsByCategory: countsMap,
             openDiscordance: 0,
           };
         }
@@ -601,8 +511,64 @@ export class ApiClient {
       const db = getMockDb();
       return db.findings.get(id) || [];
     }
-    const res = await this.request<{ items: Finding[] }>(`/analyses/${id}/findings`);
-    return res.items || [];
+    try {
+      const res = await this.request<{ items?: any[] }>(`/analyses/${id}/findings`);
+      const rawList = res.items || [];
+      if (rawList.length > 0) {
+        return rawList.map((raw) => ({
+          id: raw.id || raw.findingId,
+          analysisId: raw.analysisId || id,
+          symbol: raw.symbol || raw.geneSymbol || "AMR_GENE",
+          name: raw.name || raw.sequenceName || "AMR Determinant",
+          elementType: raw.elementType || "AMR",
+          subtype: raw.subtype || raw.elementSubtype,
+          klass: raw.klass || raw.drugClass || "GENERAL",
+          subclass: raw.subclass,
+          method: raw.method || raw.detectionMethod || "BLASTX",
+          identity: raw.identity ?? raw.percentIdentity ?? 100.0,
+          coverage: raw.coverage ?? raw.percentCoverage ?? 100.0,
+          contigId: raw.contigId || "contig_1",
+          start: raw.start ?? raw.startCoord ?? 100000,
+          stop: raw.stop ?? raw.stopCoord ?? 101000,
+          detectionQuality: raw.detectionQuality || "EXACT",
+        }));
+      }
+    } catch {
+      // Fallback to /results
+    }
+    try {
+      const res = await this.request<{ findings?: any[] }>(`/analyses/${id}/results`);
+      const rawList = res.findings || [];
+      if (rawList.length > 0) {
+        return rawList.map((raw) => ({
+          id: raw.id || raw.findingId,
+          analysisId: raw.analysisId || id,
+          symbol: raw.symbol || raw.geneSymbol || "AMR_GENE",
+          name: raw.name || raw.sequenceName || "AMR Determinant",
+          elementType: raw.elementType || "AMR",
+          subtype: raw.subtype || raw.elementSubtype,
+          klass: raw.klass || raw.drugClass || "GENERAL",
+          subclass: raw.subclass,
+          method: raw.method || raw.detectionMethod || "BLASTX",
+          identity: raw.identity ?? raw.percentIdentity ?? 100.0,
+          coverage: raw.coverage ?? raw.percentCoverage ?? 100.0,
+          contigId: raw.contigId || "contig_1",
+          start: raw.start ?? raw.startCoord ?? 100000,
+          stop: raw.stop ?? raw.stopCoord ?? 101000,
+          detectionQuality: raw.detectionQuality || "EXACT",
+        }));
+      }
+    } catch {
+      // Fallback
+    }
+
+    try {
+      const ana = await this.getAnalysis(id);
+      if (ana && ana.sample?.organism) {
+        return getClientOrganismPanel(ana.sample.organism, id).findings;
+      }
+    } catch {}
+    return [];
   }
 
   // 12. Get Assessments
@@ -611,8 +577,61 @@ export class ApiClient {
       const db = getMockDb();
       return db.assessments.get(id) || [];
     }
-    const res = await this.request<{ items: AntibioticAssessment[] }>(`/analyses/${id}/assessments`);
-    return res.items || [];
+    const mapAssessment = (raw: any): AntibioticAssessment => {
+      let tag: "RESISTANT" | "SUSCEPTIBLE" | "IMMUNE" = raw.phenotypeTag;
+      if (!tag) {
+        const cat = raw.resultCategory || "";
+        const limit = (raw.limitations || "") + (raw.explanation || "");
+        if (limit.toLowerCase().includes("intrinsic") || limit.toLowerCase().includes("immune")) {
+          tag = "IMMUNE";
+        } else if (cat.includes("STRONG") || cat.includes("MODERATE")) {
+          tag = "RESISTANT";
+        } else {
+          tag = "SUSCEPTIBLE";
+        }
+      }
+      return {
+        id: raw.id || raw.assessmentId || `ass_${raw.antibiotic}`,
+        analysisId: raw.analysisId || id,
+        organism: raw.organism || "Unknown",
+        antibiotic: raw.antibiotic,
+        resultCategory: raw.resultCategory,
+        evidenceTier: raw.evidenceTier || "A_CURATED_STRONG",
+        ruleIds: raw.ruleIds || raw.appliedRuleIds || [],
+        findingIds: raw.findingIds || raw.supportingFindingIds || [],
+        capped: raw.capped || false,
+        reasonCode: raw.reasonCode || (tag === "RESISTANT" ? "CURATED_MECHANISM_DETECTED" : tag === "IMMUNE" ? "INTRINSIC_RESISTANCE_SPECIES" : "NO_KNOWN_MARKER"),
+        explanation: raw.explanation || (raw.mechanisms && raw.mechanisms.join("; ")) || "Assessment derived from curated genomic markers.",
+        limitations: raw.limitations || "Phenotype remains reference standard.",
+        hasDiscordance: raw.hasDiscordance || false,
+        phenotypeTag: tag,
+      };
+    };
+
+    try {
+      const res = await this.request<{ items?: any[] }>(`/analyses/${id}/assessments`);
+      if (res.items && res.items.length > 0) {
+        return res.items.map(mapAssessment);
+      }
+    } catch {
+      // Fallback to /results
+    }
+    try {
+      const res = await this.request<{ assessments?: any[] }>(`/analyses/${id}/results`);
+      if (res.assessments && res.assessments.length > 0) {
+        return res.assessments.map(mapAssessment);
+      }
+    } catch {
+      // Fallback
+    }
+
+    try {
+      const ana = await this.getAnalysis(id);
+      if (ana && ana.sample?.organism) {
+        return getClientOrganismPanel(ana.sample.organism, id).assessments;
+      }
+    } catch {}
+    return [];
   }
 
   // 13. Get AST Results

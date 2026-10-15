@@ -101,9 +101,12 @@ def render_html_report(data: Dict[str, Any]) -> str:
         cat = a.get("resultCategory", "")
         badge_class = "badge-strong" if "STRONG" in cat else ("badge-mod" if "MODERATE" in cat else "badge-insuf")
         mechanisms = "; ".join(a.get("mechanisms", [])) or "None detected"
+        tag = a.get("phenotypeTag") or ("RESISTANT" if "STRONG" in cat else "SUSCEPTIBLE")
+        tag_class = "badge-tag-res" if tag == "RESISTANT" else ("badge-tag-imm" if tag == "IMMUNE" else "badge-tag-sus")
         assessments_rows += f"""
         <tr>
             <td style="font-weight: 600;">{html.escape(a.get('antibiotic', ''))}</td>
+            <td><span class="badge {tag_class}">{tag}</span></td>
             <td><span class="badge {badge_class}">{cat}</span></td>
             <td>{int(a.get('confidence', 0.0) * 100)}%</td>
             <td style="font-size: 13px;">{html.escape(mechanisms)}</td>
@@ -128,7 +131,7 @@ def render_html_report(data: Dict[str, Any]) -> str:
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<title>Genome Firewall Report — {sample['sampleLabel']}</title>
+<title>PathoGuard Report — {sample['sampleLabel']}</title>
 <style>
     body {{ font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; margin: 30px; color: #0f172a; background: #fff; line-height: 1.5; }}
     .header {{ border-bottom: 2px solid #0284c7; padding-bottom: 15px; margin-bottom: 25px; display: flex; justify-content: space-between; align-items: flex-start; }}
@@ -148,6 +151,9 @@ def render_html_report(data: Dict[str, Any]) -> str:
     .badge-strong {{ background: #fef2f2; color: #991b1b; }}
     .badge-mod {{ background: #fff7ed; color: #9a3412; }}
     .badge-insuf {{ background: #f1f5f9; color: #475569; }}
+    .badge-tag-res {{ background: #fef2f2; color: #dc2626; border: 1px solid #fca5a5; font-weight: 800; }}
+    .badge-tag-imm {{ background: #f5f3ff; color: #7c3aed; border: 1px solid #c4b5fd; font-weight: 800; }}
+    .badge-tag-sus {{ background: #ecfdf5; color: #059669; border: 1px solid #6ee7b7; font-weight: 800; }}
     .badge-ast {{ background: #eff6ff; color: #1e40af; }}
     .badge-disc {{ background: #fef2f2; color: #b91c1c; border: 1px solid #fecaca; }}
     .footer {{ margin-top: 50px; padding-top: 15px; border-top: 1px solid #e2e8f0; font-size: 11px; color: #64748b; text-align: center; }}
@@ -157,7 +163,7 @@ def render_html_report(data: Dict[str, Any]) -> str:
 
 <div class="header">
     <div>
-        <div class="logo">GENOME <span>FIREWALL</span></div>
+        <div class="logo">PATHO<span>GUARD</span></div>
         <div style="font-size: 13px; color: #64748b;">Antimicrobial Resistance Evidence Review & Discordance Platform</div>
     </div>
     <div style="text-align: right; font-size: 12px; color: #64748b;">
@@ -191,6 +197,7 @@ def render_html_report(data: Dict[str, Any]) -> str:
         <thead>
             <tr>
                 <th>Antibiotic</th>
+                <th>Profile Status</th>
                 <th>Genomic Evidence Category</th>
                 <th>Confidence</th>
                 <th>Resistance Mechanism / Rationale</th>
