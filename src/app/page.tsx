@@ -86,7 +86,7 @@ export default function OverviewPage() {
             Welcome, {labProfile?.labName || "Laboratory Team"}
           </h1>
           <p className="text-xs text-foreground-muted max-w-2xl leading-relaxed">
-            Genome Firewall enables clinical microbiology and surveillance teams to review genomic resistance evidence,
+            PathoGuard enables clinical microbiology and surveillance teams to review genomic resistance evidence,
             separate detection from prediction, and systematically audit discordance against laboratory AST.
           </p>
         </div>
@@ -182,7 +182,7 @@ export default function OverviewPage() {
               Primary Differentiator • Laboratory Discrepancy Auditing
             </span>
             <p className="text-xs text-foreground/90 mt-0.5 max-w-2xl">
-              Unlike gene-listing databases or unvalidated models, Genome Firewall prioritizes discrepancies between
+              Unlike gene-listing databases or unvalidated models, PathoGuard prioritizes discrepancies between
               genotypic resistance mechanisms and phenotypic laboratory AST results to guide quality assurance and investigate putative novel mechanisms.
             </p>
           </div>

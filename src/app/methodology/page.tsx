@@ -28,7 +28,7 @@ export default function MethodologyPage() {
           </h1>
         </div>
         <p className="text-xs text-foreground-muted font-mono leading-relaxed">
-          Operational framework, scientific rationale, evidence categories, and known limitations of Genome Firewall.
+          Operational framework, scientific rationale, evidence categories, and known limitations of PathoGuard.
         </p>
       </div>
 
@@ -38,7 +38,7 @@ export default function MethodologyPage() {
           Research and Surveillance Use Only
         </div>
         <p className="text-foreground text-xs leading-relaxed">
-          {MANDATORY_USE_STATEMENT} Genome Firewall is designed for microbiology research, genomic surveillance,
+          {MANDATORY_USE_STATEMENT} PathoGuard is designed for microbiology research, genomic surveillance,
           and laboratory quality assurance. It does not provide individual patient diagnostic calls or antibiotic treatment recommendations.
         </p>
       </div>
@@ -217,7 +217,7 @@ export default function MethodologyPage() {
         </h2>
         <div className="p-4 rounded-card bg-panel border border-panel-border space-y-3 text-xs leading-relaxed text-foreground-muted">
           <p>
-            Genome Firewall deliberately does not attempt to predict phenotypic susceptibility for biological mechanisms
+            PathoGuard deliberately does not attempt to predict phenotypic susceptibility for biological mechanisms
             that cannot be reliably established from assembly data alone:
           </p>
           <ul className="list-disc pl-5 space-y-1 text-foreground/90">

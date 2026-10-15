@@ -154,7 +154,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ isOpen = false, onClose }) => 
             For research and surveillance use only. Not for clinical diagnosis or treatment decisions.
           </div>
           <div className="text-[9px] text-foreground-muted/60 font-mono">
-            Genome Firewall • Reference Scope MVP
+            PathoGuard • Reference Scope MVP
           </div>
         </div>
       </aside>

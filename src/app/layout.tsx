@@ -19,7 +19,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Genome Firewall — Explainable Resistance-Evidence Review",
+  title: "PathoGuard — Explainable Resistance-Evidence Review",
   description:
     "An explainable genomic resistance-evidence review platform for clinical microbiology and public-health research personnel. For research and surveillance use only.",
 };

@@ -41,7 +41,7 @@ export const UseStatement: React.FC<UseStatementProps> = ({
       role="contentinfo"
     >
       <div className="max-w-content mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-        <span className="font-medium text-foreground/80">Genome Firewall</span>
+        <span className="font-medium text-foreground/80">PathoGuard</span>
         <span className="font-mono text-[11px] bg-panel-raised px-2 py-0.5 rounded border border-panel-border/50">
           {MANDATORY_USE_STATEMENT}
         </span>
