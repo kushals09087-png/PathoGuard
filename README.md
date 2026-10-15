@@ -145,3 +145,4 @@ npm run build
 ## 5. Backend Integration Handoff
 
 Refer to [`docs/API_CONTRACT_CHECKLIST.md`](docs/API_CONTRACT_CHECKLIST.md) for the complete endpoint schema definitions and integration specifications.
+# PathoGuard
